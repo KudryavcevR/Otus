@@ -9,7 +9,7 @@
 
 
 ## 2.Проверяем настройки поумолчанию и подключаем Ethernet кабель
-    ```sh
+```sh
     enable
     Show running-config
     show interface vlan 1
@@ -17,7 +17,7 @@
     show interface f0/6
     show flash
     dir flash
-    ```
+```
   Подключаем Ethernet кабель
  
    ![image](https://github.com/KudryavcevR/Otus/blob/main/labs/1%20lab/scrn/ethernet.JPG)

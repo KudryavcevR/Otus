@@ -234,10 +234,12 @@ end
 
 ## 6.Проверяем сетевое подключение
 
-- Пинг с PC-A
+Пинг с PC-A
+
 ![image](https://user-images.githubusercontent.com/99355274/153922461-103be4e5-b4da-400f-9a7a-8118859445a4.png)
 
-- Подключение по Telnet
+Подключение по Telnet
+
 ![image](https://user-images.githubusercontent.com/99355274/153922502-62bd7865-7198-423c-85ba-88d36354b90f.png)
 
 

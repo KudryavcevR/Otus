@@ -19,7 +19,8 @@ show flash
 dir flash
 ```
 
-## 3.Задаем базовые настройки на свитче
+## 3.Задаем базовые настройки на свитче и подключаем Ethernet кабель
+
 
 - Заходим в режим глобальной конфигурации
     ```sh
@@ -93,6 +94,9 @@ dir flash
     password cisco
     login
     ```
+ Подключаем Ethernet кабель
+ 
+   ![image](https://github.com/KudryavcevR/Otus/blob/main/labs/1%20lab/scrn/ethernet.JPG)
 
 ## 4.Задаем найстроки на ПК
 

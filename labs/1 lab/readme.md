@@ -31,22 +31,32 @@ dir flash
    ```sh
    hostname S1
    ``` 
+   
 - Настройка шифрования пароля
    ```sh
    service password-encryprion
    ```   
+   
 - Задаем пароль для привилегированного режима
     ```sh
     enable secret class
-    ```    
+    ```   
+    
 - Отменяем поиск в ДНС
     ```sh
     no ip domain-lookup
     ```
+    
 - Настройка банера
     ```sh
     banner motd # Unauthorized access is strictly prohibited. #
     ```
+    
+ - Настройка шлюза на коммутаторе
+    ```sh
+    ip default-gateway 192.168.1.1
+    ```   
+    
 - Включаем интерфейс 0/6
    ```sh
    enable
@@ -55,7 +65,7 @@ dir flash
    no shutdown
    ```
    
-- Создаем Vlan,назначаем ip,включаем
+- Создаем Vlan,назначаем ip,включаем интерфейс
     ```sh
     vlan 2
     exit
@@ -68,10 +78,6 @@ dir flash
     ```sh
     interface range f0/1 - 24, g0/1 - 2
     switchport access vlan 2
-    ```
-- Настройка шлюза на коммутаторе
-    ```sh
-    ip default-gateway 192.168.1.1
     ```
     
 - Настройка пароля для консольного подключения
@@ -93,9 +99,8 @@ dir flash
 ![image](https://user-images.githubusercontent.com/99355274/153926956-eb0864e9-16ec-4fca-a948-6a9e5bd5b3b3.png)
 
 
-## 5.Проверяем сетевое подключение
+## 5.Конфигурация свитча
 
-- Конфигурация свитча
  ```sh
  S1#sh run
 Building configuration...
@@ -225,11 +230,11 @@ line vty 5 15
 !
 !
 end
-```
+
+## 6.Проверяем сетевое подключение
 
 - Пинг с PC-A
 ![image](https://user-images.githubusercontent.com/99355274/153922461-103be4e5-b4da-400f-9a7a-8118859445a4.png)
-
 
 - Подключение по Telnet
 ![image](https://user-images.githubusercontent.com/99355274/153922502-62bd7865-7198-423c-85ba-88d36354b90f.png)

@@ -8,19 +8,21 @@
 ![image](https://user-images.githubusercontent.com/99355274/153922552-777bbdaa-7b25-4114-8c0b-b0db05a2a52e.png)
 
 
-## 2.Проверяем настройки поумолчанию
-```sh
-enable
-Show running-config
-show interface vlan 1
-show version
-show interface f0/6
-show flash
-dir flash
-```
+## 2.Проверяем настройки поумолчанию и подключаем Ethernet кабель
+    ```sh
+    enable
+    Show running-config
+    show interface vlan 1
+    show version
+    show interface f0/6
+    show flash
+    dir flash
+    ```
+  Подключаем Ethernet кабель
+ 
+   ![image](https://github.com/KudryavcevR/Otus/blob/main/labs/1%20lab/scrn/ethernet.JPG)
 
-## 3.Задаем базовые настройки на свитче и подключаем Ethernet кабель
-
+## 3.Задаем базовые настройки на свитче 
 
 - Заходим в режим глобальной конфигурации
     ```sh
@@ -94,9 +96,6 @@ dir flash
     password cisco
     login
     ```
- Подключаем Ethernet кабель
- 
-   ![image](https://github.com/KudryavcevR/Otus/blob/main/labs/1%20lab/scrn/ethernet.JPG)
 
 ## 4.Задаем найстроки на ПК
 

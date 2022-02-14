@@ -65,7 +65,7 @@ dir flash
    no shutdown
    ```
    
-- Создаем Vlan,назначаем ip,включаем интерфейс
+- Создаем Vlan,назначаем ip,включаем
     ```sh
     vlan 2
     exit

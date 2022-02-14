@@ -1,11 +1,15 @@
 ## Задачи
 
+![image](https://user-images.githubusercontent.com/99355274/153927058-8f24ae0d-70b2-4a4e-8f93-4f995c79e8f6.png)
+
 
 ## 1.Подключаем PC к Switch
+
 ![image](https://user-images.githubusercontent.com/99355274/153922552-777bbdaa-7b25-4114-8c0b-b0db05a2a52e.png)
 
 
 ## 2.Проверяем настройки поумолчанию
+
 enable
 Show running-config
 show interface vlan 1

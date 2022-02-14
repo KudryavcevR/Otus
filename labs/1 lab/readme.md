@@ -9,7 +9,7 @@
 
 
 ## 2.Проверяем настройки поумолчанию
-
+```sh
 enable
 Show running-config
 show interface vlan 1
@@ -17,58 +17,76 @@ show version
 show interface f0/6
 show flash
 dir flash
+```
 
 ## 3.Задаем базовые настройки на свитче
 
-- Заходим в режим глобальной конфигурации
-   enable
-   configure terminal
-   
+Заходим в режим глобальной конфигурации
+    ```sh
+    enable
+    configure terminal
+    ```
+
 - Задаем имя узла
+   ```sh
    hostname S1
-   
+   ``` 
 - Настройка шифрования пароля
+   ```sh
    service password-encryprion
-   
+   ```   
 - Задаем пароль для привилегированного режима
+    ```sh
     enable secret class
-    
+    ```    
 - Отменяем поиск в ДНС
+    ```sh
     no ip domain-lookup
-   
+    ```
 - Настройка банера
+    ```sh
     banner motd # Unauthorized access is strictly prohibited. #
-    
+    ```
 - Включаем интерфейс 0/6
+   ```sh
    enable
    config
    interface f0/6
    no shutdown
-
+   ```
+   
 - Создаем Vlan,назначаем ip,включаем
+    ```sh
     vlan 2
     exit
     interface vlan2
     ip address 192.168.1.2 255.255.255.0
     no shutdown
+    ```
     
 - Привязываем Vlan к интерфейсу
+    ```sh
     interface range f0/1 - 24, g0/1 - 2
     switchport access vlan 2
-    
+    ```
 - Настройка шлюза на коммутаторе
+    ```sh
     ip default-gateway 192.168.1.1
+    ```
     
 - Настройка пароля для консольного подключения
+     ```sh
     line con 0
     password cisco
     login
+    ```
     
 - Настройка VTY, для удаленного подключения line vty
+    ```sh
     line vty 0 15
     password cisco
     login
-    
+    ```
 
 ## 4.Задаем найстроки на ПК
 
@@ -78,6 +96,7 @@ dir flash
 ## 5.Проверяем сетевое подключение
 
 - Конфигурация свитча
+ ```sh
  S1#sh run
 Building configuration...
 
@@ -206,6 +225,7 @@ line vty 5 15
 !
 !
 end
+```
 
 - Пинг с PC-A
 ![image](https://user-images.githubusercontent.com/99355274/153922461-103be4e5-b4da-400f-9a7a-8118859445a4.png)

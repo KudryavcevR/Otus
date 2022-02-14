@@ -78,7 +78,7 @@
     
 - Привязываем Vlan к интерфейсу
     ```sh
-    interface range f0/6
+    interface f0/6
     switchport access vlan 2
     ```
     

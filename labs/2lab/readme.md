@@ -151,7 +151,7 @@
 
  1.4 Настраиваем базовые параметры каждого коммутатора.
   
-  a. Настройка имен устройств
+  - Настройка имен устройств
   ```sh
   Switch> hostname S1
   S1>
@@ -159,7 +159,7 @@
   S2>
   ```
   
-  b. Настройка IP адресов
+  - Настройка IP адресов
   ```sh
   S1>en
   S1#conf
@@ -172,12 +172,12 @@
   %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
   ```
   
-  c. Начначаем пароль для VTY
+  - Начначаем пароль для VTY
   ```sh
   S1(config)#line vty 0 15
   S1(config-line)#password cisco
   ```
-  d. Начначаем пароль для режима EXEC
+  - Начначаем пароль для режима EXEC
   ```sh
   S1>en
   S1#conf
@@ -207,8 +207,8 @@
            1    0030.f2d6.6101    DYNAMIC     Fa0/1
        ```
        
-  3. Очистите таблицу MAC-адресов коммутатора S2 и отобразите тиблицу     
-    ```sh
+  3. Очистите таблицу MAC-адресов коммутатора S2 и отобразите тиблицу   
+      ```sh
     S2#clear mac address-table dynamic
     S2#show mac address-table
               Mac Address Table
@@ -217,6 +217,8 @@
     Vlan    Mac Address       Type        Ports
     ----    -----------       --------    -----
 
-       1    0030.f2d6.6101    DYNAMIC     Fa0/1 
-    ```
+       1    0030.f2d6.6101    DYNAMIC     Fa0/1
+      ```
+      
+       
     

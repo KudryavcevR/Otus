@@ -206,17 +206,16 @@
            1    0002.4a44.9b51    DYNAMIC     Fa0/1
            1    0030.f2d6.6101    DYNAMIC     Fa0/1
        ```
-       
-  3. Очистите таблицу MAC-адресов коммутатора S2 и отобразите тиблицу   
-      ```sh
-    S2#clear mac address-table dynamic
-    S2#show mac address-table
+  3. Очистите таблицу МАС-адресов коммутатора S2 и отобразите ее снова
+        ```sh
+     S2#clear mac address-table dynamic
+     S2#show mac address-table
               Mac Address Table
-    -------------------------------------------
+      -------------------------------------------
 
-    Vlan    Mac Address       Type        Ports
-    ----    -----------       --------    -----
-
+     Vlan    Mac Address       Type        Ports
+     ----    -----------       --------    -----
+     
        1    0030.f2d6.6101    DYNAMIC     Fa0/1
       ```
       

@@ -151,15 +151,16 @@
 
  1.4 Настраиваем базовые параметры каждого коммутатора.
   
-  - Настройка имен устройств
+ Настройка имен устройств
   ```sh
   Switch> hostname S1
   S1>
   Switch> hostname S2
   S2>
   ```
-  
-  - Настройка IP адресов
+ Настройка IP адресов
+
+ - Для S1
   ```sh
   S1>en
   S1#conf
@@ -172,13 +173,45 @@
   %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
   ```
   
-  - Начначаем пароль для VTY
+ - Для S2
+    ```sh
+  S2>en
+  S2#conf
+  Configuring from terminal, memory, or network [terminal]? 
+  Enter configuration commands, one per line.  End with CNTL/Z.
+  S2(config)#int vlan 1
+  S2(config-if)#ip address 192.168.1.12 255.255.255.0
+  S2(config-if)#no sh
+  %LINK-5-CHANGED: Interface Vlan1, changed state to up
+  %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+  ```
+  
+ Начначаем пароль для VTY  
+- Для S1
   ```sh
   S1(config)#line vty 0 15
   S1(config-line)#password cisco
   ```
-  - Начначаем пароль для режима EXEC
+  
+- Для S2
+   ```sh
+  S2(config)#line vty 0 15
+  S2(config-line)#password cisco
+  ```
+  
+ Начначаем пароль для режима EXEC
+
+ Для S1 
   ```sh
+  S1>en
+  S1#conf
+  Configuring from terminal, memory, or network [terminal]? 
+  Enter configuration commands, one per line.  End with CNTL/Z.
+  S1(config)#enable secret class
+  ```
+  
+ Для S2
+   ```sh
   S1>en
   S1#conf
   Configuring from terminal, memory, or network [terminal]? 

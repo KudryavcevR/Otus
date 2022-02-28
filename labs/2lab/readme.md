@@ -272,13 +272,11 @@
      S2#show mac-address-table
             Mac Address Table
       -----------------------------------------
-
     Vlan    Mac Address       Type        Ports
-    ----    -----------       --------    -----
-
-     1    0001.64da.b90e    DYNAMIC     Fa0/1
-     1    0060.3ec6.ae01    DYNAMIC     Fa0/1
-     1    0060.47e3.9252    DYNAMIC     Fa0/16 
+    ----   -----------      --------      ----
+      1    0001.42a1.7c13    DYNAMIC     Fa0/18
+      1    0002.4a44.9b51    DYNAMIC     Fa0/1
+      1    0030.f2d6.6101    DYNAMIC     Fa0/1
 ```
  
        

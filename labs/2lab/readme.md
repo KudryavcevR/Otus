@@ -197,12 +197,14 @@
 ```sh
         S1(config)#line vty 0 15
         S1(config-line)#password cisco
+        S1(config-line)#login
 ```
   
 - Для S2
 ```sh
         S2(config)#line vty 0 15
         S2(config-line)#password cisco
+        S2(config-line)#login
 ```
   
 Начначаем пароль для режима EXEC
@@ -257,6 +259,27 @@
      
        1    0030.f2d6.6101    DYNAMIC     Fa0/1
 ```
-      
+  4. С компьютера PC-B отправьте эхо-запросы устройствам в сети и просмотрите таблицу МАС-адресов коммутатора.
+
+- Эхо запрос с PC-B узлам сети  
+     ![image](https://user-images.githubusercontent.com/99355274/156026650-533f1fe8-6f5c-481f-a183-87ec1862c5a5.png)
+     
+- ARP таблица с PC-B    
+     ![image](https://user-images.githubusercontent.com/99355274/156027651-ff8e084a-90a9-431b-9020-c781941c8f13.png)
+
+- Таблица МАС Switch2
+```sh
+     S2#show mac-address-table
+            Mac Address Table
+      -----------------------------------------
+
+    Vlan    Mac Address       Type        Ports
+    ----    -----------       --------    -----
+
+     1    0001.64da.b90e    DYNAMIC     Fa0/1
+     1    0060.3ec6.ae01    DYNAMIC     Fa0/1
+     1    0060.47e3.9252    DYNAMIC     Fa0/16 
+```
+ 
        
     

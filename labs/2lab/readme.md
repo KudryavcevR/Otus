@@ -154,13 +154,13 @@
  
 - Для S1
 ```sh
-        Switch> hostname S1
-        S1>
+        Switch(config)#> hostname S1
+        S1(config)#
 ```
  - Для S2
 ```sh
-        Switch> hostname S2
-        S2>
+        Switch(config)#> hostname S2
+        S2(config)#
 ```
 
 Настройка IP адресов

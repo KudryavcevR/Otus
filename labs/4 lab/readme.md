@@ -71,7 +71,7 @@
   ![image](https://user-images.githubusercontent.com/99355274/158790969-eba3e05e-a468-46d7-9399-5c704e7144dd.png)
 
   2.3 Назнаьте IPv6-адреса интерфейсу управления(SVI) на S1
-      
+   ```sh   
           S1(config)#sdm prefer dual-ipv4-and-ipv6 default
           S1(config)#do show sdm prefer
           The current template is "default" template.
@@ -127,7 +127,7 @@
           Output features: Check hwidb
           ND DAD is enabled, number of DAD attempts: 1
           ND reachable time is 30000 milliseconds
-          
+   ```       
           
   2.4 Назначьте компьютерам статические IPv6-адреса
       

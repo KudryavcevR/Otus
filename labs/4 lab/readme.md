@@ -66,11 +66,11 @@
           Enter configuration commands, one per line.  End with CNTL/Z.
           R1(config)#ipv6 unicast-routing
    ```      
- Введите команду ipconfig на PC-B. Проверьте данные IPv6-адреса
+  2.3 Введите команду ipconfig на PC-B. Проверьте данные IPv6-адреса
   
   ![image](https://user-images.githubusercontent.com/99355274/158790969-eba3e05e-a468-46d7-9399-5c704e7144dd.png)
 
-  2.3 Назнаьте IPv6-адреса интерфейсу управления(SVI) на S1
+  2.4 Назнаьте IPv6-адреса интерфейсу управления(SVI) на S1
    ```sh   
           S1(config)#sdm prefer dual-ipv4-and-ipv6 default
           S1(config)#do show sdm prefer
@@ -129,7 +129,7 @@
           ND reachable time is 30000 milliseconds
    ```       
           
-  2.4 Назначьте компьютерам статические IPv6-адреса
+  2.5 Назначьте компьютерам статические IPv6-адреса
       
   PC-A
   

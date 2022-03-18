@@ -17,7 +17,7 @@
 
 ## Задание 4
 
-![image](https://user-images.githubusercontent.com/99355274/159001180-082ecb9e-91e0-46be-98ef-a5f2add4767c.png)
+![image](https://user-images.githubusercontent.com/99355274/159001829-f306f1f9-ebf8-41e0-abc2-e4db0e80f20d.png)
 
 
 ## Задание 5

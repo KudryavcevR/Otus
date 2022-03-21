@@ -1,4 +1,4 @@
-# Домашние работы
+# Лабараторные работы
 
 <p><a href="https://github.com/KudryavcevR/Otus/tree/main/labs/1%20lab/readme.md">1. Базовая настройка коммутатора</a>
 <p><a href="https://github.com/KudryavcevR/Otus/tree/main/labs/2lab/readme.md">2. MAC-адреса сетевых устройств</a>

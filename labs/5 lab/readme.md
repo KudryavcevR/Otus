@@ -242,7 +242,8 @@
     Router(config)#line vty 0 5
     Router(config-line)#password cisco
     Router(config-line)#login
-    Router(config-line)#service password-encryption
+    Router(config-line)#exit
+    Router(config)#service password-encryption
     Router(config)#banner motd # Unauthorized access is strictly prohibited. #
     Router(config)#int g0/0/1
     Router(config-if)#ip address 192.168.1.1 255.255.255.0

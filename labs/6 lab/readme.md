@@ -38,20 +38,20 @@
       Switch0#conf t
       Enter configuration commands, one per line.  End with CNTL/Z.
       Switch0(config)#hostname S2
-      S2(config)#no ip domain lookup
-      S2(config)#enable password class
-      S2(config-line)#line con 0
-      S2(config-line)#password cisco
-      S2(config-line)#login
-      S2(config-line)#line vty 0 5
-      S2(config-line)#password cisco
-      S2(config-line)#login
-      S2(config-line)#exit
-      S2(config)#service password-encryption 
-      S2(config)#banner motd ## Attention!! ##
+      S1(config)#no ip domain lookup
+      S1(config)#enable password class
+      S1(config-line)#line con 0
+      S1(config-line)#password cisco
+      S1(config-line)#login
+      S1(config-line)#line vty 0 5
+      S1(config-line)#password cisco
+      S1(config-line)#login
+      S1(config-line)#exit
+      S1(config)#service password-encryption 
+      S1(config)#banner motd ## Attention!! ##
       %SYS-5-CONFIG_I: Configured from console by console
-      S2#clock set 14:31 28 march 2022
-      S2#copy running-config startup-config 
+      S1#clock set 14:31 28 march 2022
+      S1#copy running-config startup-config 
       Destination filename [startup-config]? 
       Building configuration...
       [OK]
@@ -134,10 +134,10 @@
    ```
    1.2 Настройте интерфейс управления и шлюз
    ```sh
-      S1(config)#int vlan 10
-      S1(config-if)#ip address 192.168.10.12 255.255.255.0
-      S1(config-if)#ex
-      S1(config)#ip default-gateway 192.168.10.1
+      S2(config)#int vlan 10
+      S2(config-if)#ip address 192.168.10.12 255.255.255.0
+      S2(config-if)#ex
+      S2(config)#ip default-gateway 192.168.10.1
    ```
    1.3 Назначьте все неиспользуемые порты коммутатора VLAN Parking_Lot
    ```sh
@@ -188,11 +188,11 @@
   ### Шаг 1. Вручную настройте магистральный интерфейс F0/1 на коммутаторах S1 и S2.
 **Коммутатор S1**
   ```sh
-      S2(config)#int f0/1
-      S2(config-if)#switchport mode trunk
-      S2(config-if)#switchport trunk native vlan 1000
-      S2(config-if)#switchport trunk allowed vlan 10,20,30,1000
-      S2(config-if)#do show int trunk
+      S1(config)#int f0/1
+      S1(config-if)#switchport mode trunk
+      S1(config-if)#switchport trunk native vlan 1000
+      S1(config-if)#switchport trunk allowed vlan 10,20,30,1000
+      S1(config-if)#do show int trunk
       Port        Mode         Encapsulation  Status        Native vlan
       Fa0/1       on           802.1q         trunking      1000
 

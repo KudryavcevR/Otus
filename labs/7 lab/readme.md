@@ -349,6 +349,8 @@ Fa0/4            Root FWD 19        128.4    P2p
 Fa0/2            Altn BLK 19        128.2    P2p 
 ```
  ### Шаг 1.Определите коммутатор с заблокированным портом.
+ 
+**Коммутатор S3**
  ```sh
 S3#show spanning-tree
 VLAN0001
@@ -370,6 +372,84 @@ Fa0/4            Root FWD 19        128.4    P2p
 Fa0/2            Altn BLK 19        128.2    P2p 
 ```
 
- ### Измените стоимость порта.
- ```sh
+ ### Шаг 2. Измените стоимость порта.
  
+ **Коммутатор S3**
+ ```sh
+S3(config)#int f0/2
+S3(config-if)#spanning-tree cost 18
+S3(config-if)#do show spanning-tree
+```
+ ### Шаг 3. Посмотрите изменения протокола spanning-tree.
+ 
+ **Коммутатор S3**
+ ```sh
+  S3#show spanning-tree
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0001.64E5.23CA
+             Cost        19
+             Port        4(FastEthernet0/4)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     00E0.A31E.B4DD
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/4            Root FWD 19        128.4    P2p
+Fa0/2            Desg BLK 18        128.2    P2p 
+ ```  
+**Коммутатор S1**
+ ```sh 
+S1#show spanning-tree
+  VLAN0001
+    Spanning tree enabled protocol ieee
+    Root ID    Priority    32769
+               Address     0001.64E5.23CA
+               Cost        19
+               Port        2(FastEthernet0/2)
+               Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+    Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+               Address     0005.5E40.543E
+               Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+               Aging Time  20
+
+  Interface        Role Sts Cost      Prio.Nbr Type
+  ---------------- ---- --- --------- -------- --------------------------------
+  Fa0/2            Root FWD 19        128.2    P2p
+  Fa0/4            Altn BLK 19        128.4    P2p
+```
+
+ ### Шаг 4. Удалите изменения стоимости порта
+ 
+**Коммутатор S1**
+ ```sh
+S1(config)# interface f0/4
+S1(config-if)# no spanning-tree cost 18
+```
+
+**Коммутатор S3**
+```sh
+   VLAN0001
+    Spanning tree enabled protocol ieee
+    Root ID    Priority    32769
+               Address     0001.64E5.23CA
+               Cost        19
+               Port        2(FastEthernet0/2)
+               Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+    Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+               Address     0005.5E40.543E
+               Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+               Aging Time  20
+
+  Interface        Role Sts Cost      Prio.Nbr Type
+  ---------------- ---- --- --------- -------- --------------------------------
+  Fa0/2            Root FWD 19        128.2    P2p
+  Fa0/4            Desg FWD 19        128.4    P2p
+``` 

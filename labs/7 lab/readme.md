@@ -376,7 +376,7 @@ Fa0/2            Altn BLK 19        128.2    P2p
  
  **Коммутатор S3**
  ```sh
-S3(config)#int f0/2
+S3(config)#int f0/4
 S3(config-if)#spanning-tree cost 18
 S3(config-if)#do show spanning-tree
 ```
@@ -429,7 +429,7 @@ S1#show spanning-tree
  
 **Коммутатор S1**
  ```sh
-S1(config)# interface f0/4
+S1(config)# interface f0/2
 S1(config-if)# no spanning-tree cost 18
 ```
 

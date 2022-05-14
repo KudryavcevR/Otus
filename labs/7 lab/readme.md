@@ -4,7 +4,7 @@
 
  ### Шаг 1. Создайте сеть согласно топологии.
 
-![image](https://user-images.githubusercontent.com/99355274/160563005-20901514-e8e1-4605-9674-d811af7ae1cd.png)
+![image](https://user-images.githubusercontent.com/99355274/168442937-a2d05487-a083-4786-979b-c9bad359b3bb.png)
 
  ### Шаг 2. Выполните инициализацию и перезагрузку коммутаторов.
  ```sh

@@ -15,13 +15,6 @@
         Proceed with reload? [confirm]
           Booting `IOSv' Booting `IOSv
 
-'
-
-error: Can't get controller info..
-error: Can't get controller info.Booted IOSv. Boot args: [/vios_l2-adventerpris]
-
-Smart Init is enabled
-
               Restricted Rights Legend
 
 Use, duplication, or disclosure by the Government is
@@ -279,37 +272,79 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 0/0/0 ms
 
 ## Часть 2. Определение корневого моста
   ### Шаг 1. Отключите все порты на коммутаторах.
+  
+**Коммутатор S1**
+
 ```sh
   S1(config)#int range g0/0-3
   S1(config-if-range)#sh
   S1(config)#int range g1/0-3
   S1(config-if-range)#sh
 ```
+**Коммутатор S2**
+```sh
+  S2(config)#int range g0/0-3
+  S2(config-if-range)#sh
+  S2(config)#int range g1/0-3
+  S2(config-if-range)#sh
+```
+**Коммутатор S3**
+```sh
+  S3(config)#int range g0/0-3
+  S3(config-if-range)#sh
+  S3(config)#int range g1/0-3
+  S3(config-if-range)#sh
+```
 
   ### Шаг 2. Настройте подключенные порты в качестве транковых.
+
+**Коммутатор S1**
 ```sh
   S1(config)#int range g0/1-3
   S1(config-if-range)#sw m t
   S1(config-if-range)#int g1/1
   S1(config-if)#sw m t
   S1(config-if)#
-
+```
+**Коммутатор S2**
+```sh
+  S2(config)#int range g0/1-3
+  S2(config-if-range)#sw m t
+  S2(config-if-range)#int g1/1
+  S2(config-if)#sw m t
+  S2(config-if)#
+```
+**Коммутатор S3**
+```sh
+  S3(config)#int range g0/1-3
+  S3(config-if-range)#sw m t
+  S3(config-if-range)#int g1/1
+  S3(config-if)#sw m t
+  S3(config-if)#
 ```
 
-  ### Шаг 3. Включите порты f0/2,f0/4 на всех коммутаторах
+  ### Шаг 3. Включите порты g0/2(f0/2),g1/1(f0/4) на всех коммутаторах
+
+**Коммутатор S1**
 ```sh
-  S1(config)#int f0/2
+  S1(config)#int g0/2
   S1(config-if)#no sh
-  S1(config-if)#
-  %LINK-5-CHANGED: Interface FastEthernet0/2, changed state to up
-  %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to up
-  %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
-  S1(config-if)#int f0/4
+  S1(config-if)#int g1/1
   S1(config-if)#no sh
-  S1(config-if)#
-  %LINK-5-CHANGED: Interface FastEthernet0/4, changed state to up
-  %LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/4, changed state to up
-  S1(config-if)#  
+```
+**Коммутатор S2**
+```sh
+  S2(config)#int g0/2
+  S2(config-if)#no sh
+  S2(config-if)#int g1/1
+  S2(config-if)#no sh
+```
+**Коммутатор S3**
+```sh
+  S3(config)#int g0/2
+  S3(config-if)#no sh
+  S3(config-if)#int g1/1
+  S3(config-if)#no sh
 ```
 
 ### Шаг 4. Отобразите данные протокола spanning-tree
@@ -335,8 +370,6 @@ Interface           Role Sts Cost      Prio.Nbr Type
 ------------------- ---- --- --------- -------- --------------------------------
 Gi0/2               Desg FWD 4         128.3    P2p
 Gi1/1               Root FWD 4         128.6    P2p
-
-
  ``` 
  
 **Коммутатор S2**
@@ -496,8 +529,7 @@ Gi0/2               Altn BLK 4         128.3    P2p
 Gi1/1               Root FWD 4         128.6    P2p
 ```
 
-**Коммутатор S3**
-
+**Коммутатор S1**
 ```sh
 S1#sh spanning-tree
 
@@ -521,6 +553,32 @@ Gi1/1               Root FWD 4         128.6    P2p
 ``` 
 ## Часть 4.	Наблюдение за процессом выбора протоколом STP порта, исходя из приоритета портов.
 
+### Включите g0/1(f0/1) и g0/3(f0/3) на всех коммутаторах
+
+**Коммутатор S1**
+```sh
+S1(config)#int g0/1
+S1(config-if)#no sh
+S1(config-if)#int g0/3
+S1(config-if)#no sh
+```
+**Коммутатор S2**
+```sh
+S2(config)#int g0/1
+S2(config-if)#no sh
+S2(config-if)#int g0/3
+S2(config-if)#no sh
+```
+**Коммутатор S3**
+```sh
+S3(config)#int g0/1
+S3(config-if)#no sh
+S3(config-if)#int g0/3
+S3(config-if)#no sh
+```
+
+ ### Выполните команду show spanning-tree
+ 
 **Коммутатор S1**
 ```sh
 S1#sh spanning-tree
@@ -545,6 +603,7 @@ Gi0/2               Desg FWD 4         128.3    P2p
 Gi0/3               Root FWD 4         128.4    P2p
 Gi1/1               Altn BLK 4         128.6    P2p
 ```
+
 **Коммутатор S2**
 ```sh
 S2#sh spanning-tree
@@ -568,29 +627,4 @@ Gi0/1               Altn BLK 4         128.2    P2p
 Gi0/2               Altn BLK 4         128.3    P2p
 Gi0/3               Root FWD 4         128.4    P2p
 Gi1/1               Altn BLK 4         128.6    P2p
-```
-
-**Коммутатор S3**
-```sh
-S3#sh spanning-tree
-
-VLAN0001
-  Spanning tree enabled protocol ieee
-  Root ID    Priority    32769
-             Address     5000.0001.0000
-             This bridge is the root
-             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
-
-  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
-             Address     5000.0001.0000
-             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
-             Aging Time  300 sec
-
-Interface           Role Sts Cost      Prio.Nbr Type
-------------------- ---- --- --------- -------- --------------------------------
-Gi0/1               Desg FWD 4         128.2    P2p
-Gi0/2               Desg FWD 4         128.3    P2p
-Gi0/3               Desg FWD 4         128.4    P2p
-Gi1/1               Desg FWD 4         128.6    P2p
-
 ```

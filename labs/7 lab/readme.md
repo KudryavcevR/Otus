@@ -478,7 +478,7 @@ Gi1/1               Root FWD 3         128.6    P2p
  ```  
 **Коммутатор S1**
  ```sh 
-S1#show spanning-tree
+S1#sh spanning-tree
 
 VLAN0001
   Spanning tree enabled protocol ieee
@@ -491,11 +491,11 @@ VLAN0001
   Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
              Address     5000.0002.0000
              Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
-             Aging Time  300 sec
+             Aging Time  15  sec
 
 Interface           Role Sts Cost      Prio.Nbr Type
 ------------------- ---- --- --------- -------- --------------------------------
-Gi0/2               Desg FWD 4         128.3    P2p
+Gi0/2               Altn BLK 4         128.3    P2p
 Gi1/1               Root FWD 4         128.6    P2p
 ```
 

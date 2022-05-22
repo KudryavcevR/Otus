@@ -5,7 +5,7 @@
 
 ### 1.1 Создайте сеть согласно топологии.
 
-![image](https://user-images.githubusercontent.com/99355274/169703866-6be4e913-ffa6-4e5d-a179-18fb795610d3.png)
+![image](https://user-images.githubusercontent.com/99355274/169703991-0ee48ff6-6b50-43f3-882d-7358cd104fe7.png)
 
 ### 1.2 Произведите базовую настройку маршрутизаторов.
 ```sh

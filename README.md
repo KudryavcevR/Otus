@@ -8,4 +8,4 @@
 <p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/6%20lab/readme.md">6. Внедрение маршрутизации между виртуальными локальными сетями</a>
 <p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/7%20lab/readme.md">7. Развертывание коммутируемой сети с резервными каналами(STP)</a>
 <p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/8%20lab/readme.md">8. Настройка DHCPv6</a>
-<p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/9%20lab/readme.md">9. Принципы обеспечения безопасности сети 6</a>
+<p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/9%20lab/readme.md">9. Принципы обеспечения безопасности сети</a>

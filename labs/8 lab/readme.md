@@ -124,7 +124,7 @@ R1(config-if)# ipv6 dhcp server R2-STATEFUL
 
 ### 5.2 Настройте R2 в качестве агента DHCP-ретрансляции для локальной сети на G0/0/1.
 ```sh
-R2 (конфигурация) # int g0/1
+R2 (config) # int g0/1
 R2(config-if)# ipv6 nd managed-config-flag
 R2(config-if)# ipv6 dhcp relay destination 2001:db8:acad:2::1 g0/0
 ```

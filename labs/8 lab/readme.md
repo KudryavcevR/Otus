@@ -53,7 +53,7 @@ VPCS1  fe80::250:79ff:fe66:6807/64
 
 ### 3.1 Более подробно изучите конфигурацию PC-A.
 
-![image](https://user-images.githubusercontent.com/99355274/169702635-781f37a2-facc-4018-92f7-9c9b2f58b190.png)
+![image](https://user-images.githubusercontent.com/99355274/169704555-61fe0fa5-813b-43ea-adbb-5f6f94203ce9.png)
 
 ### 3.2 Настройте R1 для предоставления DHCPv6 без состояния для PC-A.
 ```sh

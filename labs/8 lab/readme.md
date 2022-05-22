@@ -8,6 +8,7 @@
 ![image](https://user-images.githubusercontent.com/99355274/169703991-0ee48ff6-6b50-43f3-882d-7358cd104fe7.png)
 
 ### 1.2 Произведите базовую настройку маршрутизаторов.
+**Коммутатор R1**
 ```sh
 R1(config)#hostname R1
 R1(config)#no ip domain-lookup
@@ -21,7 +22,23 @@ R1(config)#service password-encryption
 R1(config)#banner motd ## Attention!! For staff only!! ##
 R1#wr
 ```
+**Коммутатор R2**
+```sh
+R2(config)#hostname R1
+R2(config)#no ip domain-lookup
+R2(config)#enable password class
+R2(config)#line con 0
+R2(config-line)#password cisco
+R2(config-line)#line vty 0 4
+R2(config-line)#password cisco
+R2(config-line)#exit
+R2(config)#service password-encryption
+R2(config)#banner motd ## Attention!! For staff only!! ##
+R2#wr
+```
 ### 1.3 Настройка интерфейсов и маршрутизации для обоих маршрутизаторов.
+
+**Коммутатор R1**
 ```sh
 R1(config)#int g0/0
 R1(config-if)#ipv6 address FE80::1 link-local
@@ -36,18 +53,30 @@ Sending 5, 100-byte ICMP Echos to 2001:DB8:ACAD:3::1, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/4 ms
 R1#
+R1(config)#ipv6 route ::/0 GigabitEthernet0/0 FE80::2
 R1#wr
+```
+**Коммутатор R2**
+```sh
+R2(config)#int g0/0
+R2(config-if)#ipv6 address FE80::2 link-local
+R2(config-if)#ipv6 address 2001:db8:acad:2::2/64
+R2(config)#int g0/1
+R2(config-if)#ipv6 address FE80::1 link-local
+R2(config-if)#ipv6 address 2001:db8:acad:3::1/64
+R2#
+R2#ping 2001:DB8:ACAD:1::1
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2001:DB8:ACAD:1::1, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/4 ms
+R2(config)#ipv6 route ::/0 GigabitEthernet0/0 FE80::1
+R2#wr
 ```
 
 ## Часть 2: Проверка назначения адреса SLAAC от R1.
-```sh
-VPCS> sh ipv6 all
 
-NAME   IP/MASK                                 ROUTER LINK-LAYER  MTU
-VPCS1  fe80::250:79ff:fe66:6807/64
-       2001:db8:acad:1:2050:79ff:fe66:6807/64  50:00:00:04:00:01  1500
-
-```
+![image](https://user-images.githubusercontent.com/99355274/169705023-95460d0a-adaf-47cc-8404-f57b66c5dd64.png)
 
 ## Часть 3: Настройка и проверка сервера DHCPv6 на R1
 

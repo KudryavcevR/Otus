@@ -5,6 +5,8 @@
 
 ### 1.1 Создайте сеть согласно топологии.
 
+![image](https://user-images.githubusercontent.com/99355274/169703866-6be4e913-ffa6-4e5d-a179-18fb795610d3.png)
+
 ### 1.2 Произведите базовую настройку маршрутизаторов.
 ```sh
 R1(config)#hostname R1

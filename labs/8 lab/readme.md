@@ -17,6 +17,7 @@ R1(config)#line con 0
 R1(config-line)#password cisco
 R1(config-line)#line vty 0 4
 R1(config-line)#password cisco
+R1(config-line)#login
 R1(config-line)#exit
 R1(config)#service password-encryption
 R1(config)#banner motd ## Attention!! For staff only!! ##
@@ -31,6 +32,7 @@ R2(config)#line con 0
 R2(config-line)#password cisco
 R2(config-line)#line vty 0 4
 R2(config-line)#password cisco
+R2(config-line)#login
 R2(config-line)#exit
 R2(config)#service password-encryption
 R2(config)#banner motd ## Attention!! For staff only!! ##

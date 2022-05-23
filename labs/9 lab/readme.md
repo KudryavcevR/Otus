@@ -310,6 +310,7 @@ GigabitEthernet0/1         yes        yes             unlimited
   Custom circuit-ids:
 ```
 ### В командной строке на PC-B освободите, а затем обновите IP-адрес.
+![image](https://user-images.githubusercontent.com/99355274/169863080-c661445d-1e70-4a69-a3a8-07e4c8f5d079.png)
 
 ### Проверьте привязку отслеживания DHCP с помощью команды show ip dhcp snooping binding.
 ```sh

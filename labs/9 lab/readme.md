@@ -260,7 +260,6 @@ Sticky MAC Addresses       : 0
 Last Source Address:Vlan   : 0000.0000.0000:0
 Security Violation Count   : 0
 ```
-
 **Коммутатор S2**
 ```sh
 S2(config)#int g0/0
@@ -337,7 +336,6 @@ S2(config)#int g0/0
 S2(config-if)#spanning-tree bpduguard enable
 S2(config-if)#
 ```
-
 
 ### Убедитесь, что защита BPDU и PortFast включены на соответствующих портах.
 ```sh

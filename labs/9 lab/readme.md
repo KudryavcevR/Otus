@@ -4,6 +4,7 @@
 ## Часть 1: Настройка основного сетевого устройства.
 
 ### Шаг 1. Создайте сеть.
+![image](https://user-images.githubusercontent.com/99355274/169803518-0f708f12-dce9-483b-b263-8cf55e87349d.png)
 
 ### Шаг 2. Настройте маршрутизатор R1.
 ```sh
@@ -32,6 +33,8 @@ line con 0
  logging synchronous
  exec-timeout 0 0
  ```
+ ![image](https://user-images.githubusercontent.com/99355274/169803642-108d718d-329f-4073-bc86-c407aaca70ff.png)
+
 ### Шаг 3. Настройка и проверка основных параметров коммутатора.
 **Коммутатор S1**
 ```sh
@@ -78,7 +81,7 @@ S2(config)#ip default-gateway 192.168.10.1
 S2(config)#
 ```
 
-## Часть 2. Настройка сетей VLAN на коммутаторах.
+## Часть 2: Настройка сетей VLAN на коммутаторах.
 ### Шаг 1. Сконфигруриуйте VLAN 10.
 **Коммутатор S1**
 ```sh
@@ -114,7 +117,7 @@ S2(config-vlan)#name ParkingLot
 S2(config-vlan)#
 ```
 
-## Часть 3. Настройки безопасности коммутатора.
+## Часть 3: Настройки безопасности коммутатора.
 ### Шаг 1. Релизация магистральных соединений 802.1Q.
 **Коммутатор S1**
 ```sh
@@ -351,6 +354,9 @@ S1(config-if)#do sh spanning-tree int g0/0 detail
    Bpdu guard is enabled
    BPDU: sent 1694, received 0
  ```  
-   
-   
+ 
+ ### Шаг 7. Проверьте наличие сквозного ⁪подключения.
+ 
+![image](https://user-images.githubusercontent.com/99355274/169803428-638d9c58-df22-4cea-af57-9095ff2bc24d.png)
+
    

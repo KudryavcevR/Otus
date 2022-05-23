@@ -307,6 +307,7 @@ Interface                  Trusted    Allow option    Rate limit (pps)
 GigabitEthernet0/1         yes        yes             unlimited
   Custom circuit-ids:
 ```
+### В командной строке на PC-B освободите, а затем обновите IP-адрес.
 
 ### Проверьте привязку отслеживания DHCP с помощью команды show ip dhcp snooping binding.
 ```sh

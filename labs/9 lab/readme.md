@@ -33,6 +33,7 @@ line con 0
  exec-timeout 0 0
  ```
 ### Шаг 3. Настройка и проверка основных параметров коммутатора.
+**Коммутатор S1**
 ```sh
 Switch>en
 Switch#conf t
@@ -60,6 +61,8 @@ S1(config-if)#description to S2
 S1(config-if)#
 S1(config)#ip default-gateway 192.168.10.1
 ```
+**Коммутатор S2**
+```sh
 Switch(config)#
 Switch(config)#hostname S2
 S2(config)#no ip domain-lookup
@@ -73,42 +76,48 @@ S2(config)#ip defaul
 S2(config)#ip default-g
 S2(config)#ip default-gateway 192.168.10.1
 S2(config)#
-
+```
 
 ## Часть 2. Настройка сетей VLAN на коммутаторах.
 ### Шаг 1. Сконфигруриуйте VLAN 10.
-
+**Коммутатор S1**
+```sh
 S1(config)#vlan 10
 S1(config-vlan)#name Managment
 S1(config-vlan)#
 S1(config-if)#ip address 192.168.10.201 255.255.255.0
-
+```
+**Коммутатор S2**
+```sh
 S2(config)#vlan 10
 S2(config-vlan)#name Managment
 S2(config-vlan)#
 S2(config-vlan)#int vlan 10
 S2(config-if)#ip add 192.168.10.202 255.255.255.0
+```
 
 ### Шаг 3. Настройте VLAN 333 с именем Native, VLAN 999 с именем ParkingLo на S1 и S2.
-
+**Коммутатор S1**
+```sh
 S1(config)#vlan 333
 S1(config-vlan)#name Native
 S1(config-vlan)#vlan 999
 S1(config-vlan)#name ParkingLot
 S1(config-vlan)#
-
-
+```
+**Коммутатор S2**
+```sh
 S2(config)#vlan 333
 S2(config-vlan)#name Native
 S2(config-vlan)#vlan 999
 S2(config-vlan)#name ParkingLot
 S2(config-vlan)#
-
+```
 
 ## Часть 3. Настройки безопасности коммутатора.
-
 ### Шаг 1. Релизация магистральных соединений 802.1Q.
-
+**Коммутатор S1**
+```sh
 S1(config)#int g0/1
 S1(config-if)#switchport trunk encapsulation dot1q
 S1(config-if)#sw m t
@@ -133,9 +142,9 @@ Gi0/1       1,10,333,999
 S1(config-if)#switchport nonegotiate
 S1(config-if)#do sh int g0/1 sw | include Negotiation
 Negotiation of Trunking: Off
-
-
--------------------------------------------------------------------
+```
+**Коммутатор S2**
+```sh
 S2(config)#int g0/1
 S2(config-if)#sw
 S2(config-if)#switchport trunk encapsulation dot1q
@@ -159,22 +168,21 @@ Gi0/1       1,10,333,999
 S2(config-if)#switchport nonegotiate
 S2(config-if)#do sh int g0/1 sw | include Negotiation
 Negotiation of Trunking: Off
-
+```
 ### Шаг 2. Настройка портов доступа.
+**Коммутатор S1**
+```sh
 S1(config-if)#int range g0/0,g0/2
-S1(config-if-range)#sw
-S1(config-if-range)#switchport a
-S1(config-if-range)#switchport ac
-S1(config-if-range)#switchport access vl
 S1(config-if-range)#switchport access vlan 10
-
+```
+**Коммутатор S2**
+```sh
 S2(config-if)#int g0/0
-S2(config-if)#sw m a
-S2(config-if)#sw
-S2(config-if)#switchport ac
 S2(config-if)#switchport access vlan 10
-
+```
 ### Шаг 3. Безопасность неиспользуемых портов коммутатора.
+**Коммутатор S1**
+```sh
 S1(config)#int g0/3
 S1(config-if-range)#sw a vla 999
 S1(config)#int g1/0
@@ -191,8 +199,9 @@ Gi1/0                        disabled     999          auto   auto RJ45
 Gi1/1                        disabled     999          auto   auto RJ45
 Gi1/2                        disabled     999          auto   auto RJ45
 Gi1/3                        disabled     999          auto   auto RJ45
-
-
+```
+**Коммутатор S2**
+```sh
 S2(config)#int range g0/2-3
 S2(config-if-range)#sw a vla 999
 S2(config)#int g1/0
@@ -208,9 +217,11 @@ Gi1/0                        disabled     999          auto   auto RJ45
 Gi1/1                        disabled     999          auto   auto RJ45
 Gi1/2                        disabled     999          auto   auto RJ45
 Gi1/3                        disabled     999          auto   auto RJ45
+```
 
 ### Шаг 4. Документирование и реализация функций безопасности порта.
-
+**Коммутатор S1**
+```sh
 S1#sh port-security int g0/0
 Port Security              : Disabled
 Port Status                : Secure-down
@@ -226,26 +237,12 @@ Last Source Address:Vlan   : 0000.0000.0000:0
 Security Violation Count   : 0
 
 S1(config)#int g0/0
-S1(config-if)#swi
-S1(config-if)#switchport port
 S1(config-if)#switchport port-security
-S1(config-if)#switchport port-security ma
-S1(config-if)#switchport port-security max
 S1(config-if)#switchport port-security maximum 3
-S1(config-if)#switchport port-security vio
-S1(config-if)#switchport port-security violation rest
 S1(config-if)#switchport port-security violation restrict
-S1(config-if)#switchport port-security agi
 S1(config-if)#switchport port-security aging time 60
-S1(config-if)#switchport port-security aging ?
-  static  Enable aging for configured secure addresses
-  time    Port-security aging time
-  type    Port-security aging type
-
-S1(config-if)#switchport port-security aging type ?
-  absolute    Absolute aging (default)
-  inactivity  Aging based on inactivity time period
 S1(config-if)#switchport port-security aging type inactivity
+
 S1(config-if)#do sh port-sec int g0/0
 Port Security              : Enabled
 Port Status                : Secure-up
@@ -259,7 +256,10 @@ Configured MAC Addresses   : 0
 Sticky MAC Addresses       : 0
 Last Source Address:Vlan   : 0000.0000.0000:0
 Security Violation Count   : 0
-----------------------------------------------------------------------------------
+```
+
+**Коммутатор S2**
+```sh
 S2(config)#int g0/0
 S2(config-if)#switchport port-security
 S2(config-if)#switchport port-security maximum 2
@@ -277,8 +277,9 @@ Vlan    Mac Address       Type                          Ports   Remaining Age
 -----------------------------------------------------------------------------
 Total Addresses in System (excluding one mac per port)     : 0
 Max Addresses limit in System (excluding one mac per port) : 4096
-
+```
 ### Шаг 5. Реализовать безопасность DHCP snooping.
+```sh
 S2(config)#ip dhcp snooping
 S2(config)#ip dhcp snooping vlan 10
 S2(config)#int g0/1
@@ -305,35 +306,37 @@ Interface                  Trusted    Allow option    Rate limit (pps)
 -----------------------    -------    ------------    ----------------
 GigabitEthernet0/1         yes        yes             unlimited
   Custom circuit-ids:
-  
-### Проверьте привязку отслеживания DHCP с помощью команды show ip dhcp snooping binding.
+```
 
+### Проверьте привязку отслеживания DHCP с помощью команды show ip dhcp snooping binding.
+```sh
 S2#sh ip dhcp snooping binding
 MacAddress          IpAddress        Lease(sec)  Type           VLAN  Interface
 ------------------  ---------------  ----------  -------------  ----  --------------------
 50:00:00:02:00:00   192.168.10.11    86369       dhcp-snooping   10    GigabitEthernet0/0
 Total number of bindings: 1
-
+```
 ### Шаг 6. Реализация PortFast и BPDU Guard.
-
-
+**Коммутатор S1**
+```sh
 S1(config)#int range g0/0-2
 S1(config-if)#spanning-tree portfast
 S1(config)#int range g0/0
 S1(config-if)#spanning-tree bpduguard enable
 S1(config-if)#
-
--------------------------------------------------------------------------------
+```
+**Коммутатор S2**
+```sh
 S2(config)#int g0/0-1
 S2(config-if)#spanning-tree portfast
 S2(config)#int g0/0
 S2(config-if)#spanning-tree bpduguard enable
 S2(config-if)#
-
+```
 
 
 ### Убедитесь, что защита BPDU и PortFast включены на соответствующих портах.
-
+```sh
 S1(config-if)#do sh spanning-tree int g0/0 detail
  Port 1 (GigabitEthernet0/0) of VLAN0010 is designated forwarding
    Port path cost 4, Port priority 128, Port Identifier 128.1.
@@ -346,7 +349,7 @@ S1(config-if)#do sh spanning-tree int g0/0 detail
    Link type is point-to-point by default
    Bpdu guard is enabled
    BPDU: sent 1694, received 0
-   
+ ```  
    
    
    

@@ -1,24 +1,20 @@
-![image](https://user-images.githubusercontent.com/99355274/171911571-8f8154b2-a458-43fb-9ce8-89d9f5caf3b1.png)
+![image](https://user-images.githubusercontent.com/99355274/171928063-84a550c8-5dfb-4286-9636-ab610845c19b.png)
 ![image](https://user-images.githubusercontent.com/99355274/171911594-4668dec8-4cbc-4ba2-b6ef-38f4dad816e4.png)
-
 
 ## Часть 1:	Создание сети и настройка основных параметров устройства
 
-### Шаг 1. Создание схемы адресации
-Устройство	Интерфейс	IP-адрес	Маска подсети	Шлюз по умолчанию
-R1	G0/0/0	10.0.0.1	255.255.255.252	—
-R1	G0/0/1	—	—	—
-R1	G0/0/1.100	192.168.1.1	255.255.255.192	—
-R1	G0/0/1.200	192.168.1.65	255.255.255.224	—
-R1	G0/0/1.1000	—	—	—
-R2	G0/0	10.0.0.2	255.255.255.252	—
-R2	G0/0/1	192.168.1.97	255.255.255.240	—
-S1	VLAN 200	192.168.1.66	255.255.255.224	192.168.1.65
-S2	VLAN 1	192.168.1.98	255.255.255.240	192.168.1.97
-PC-A	NIC	DHCP	DHCP	DHCP
-PC-B	NIC	DHCP	DHCP	DHCP
+### Шаг 1.Создание схемы адресации
 
+![image](https://user-images.githubusercontent.com/99355274/171927993-0f9c208e-cf02-4ba4-a53a-fe4d87d78f91.png)
 
+### Шаг 2.Создайте сеть согласно топологии
+
+![image](https://user-images.githubusercontent.com/99355274/171930028-0fea06a6-f563-4a89-a38d-e8ead54eb35f.png)
+
+### Шаг 3.Произведите базовую настройку маршрутизаторов
+
+**Маршрутизатор R1**
+```sh
 Router(config)#hostname R1
 R1(config)#no ip domain-lookup
 R1(config)#enable password class
@@ -44,21 +40,111 @@ Building configuration...
 R1#
 Jun  2 14:22:43.013: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
 Jun  2 14:22:43.799: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk successfully.
+```
 
+**Маршрутизатор R2**
+```sh
+Router(config)#hostname R2
+R2(config)#no ip domain-lookup
+R2(config)#enable password class
+R2(config)#line con 0
+R2(config-line)#password cisco
+R2(config-line)#line vty 0 4
+R2(config-line)#password cisco
+R2(config)#service password-encryption
+R2(config)#banner motd # Attention for staff only! #
+R2#clock set 14:22:00 02 jun 2022
+R2#
+*Jun  2 14:22:00.000: %SYS-6-CLOCKUPDATE: System clock has been updated from 14:23:40 UTC Thu Jun 2 2022 to 14:22:00 UTC Thu Jun 2 2022, configured from console by console.
+R2#clock ?
+  read-calendar    Read the hardware calendar into the clock
+  set              Set the time and date
+  update-calendar  Update the hardware calendar from the clock
 
+R2#clock upd
+R2#clock update-calendar
+R2#wr
+Building configuration...
+[OK]
+R2#
+Jun  2 14:22:43.013: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
+Jun  2 14:22:43.799: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk successfully.
+```
 
-## Настройка сети Роутера
+### Шаг 4.Настройка маршрутизации между сетями VLAN на маршрутизаторе R1.
+```sh
+R1(config)#int g0/1
+R1(config-if)#no sh
+R1(config-if)#exit
+R1(config)#int g0/1.100
+R1(config-if)#encapsulation dot1Q 100
+R1(config-if)#description Clients
+R1(config-if)#ip address 192.168.1.1 255.255.255.192
 
+R1(config)#int g0/1.200
+R1(config-if)#encapsulation dot1Q 200
+R1(config-if)#description Managment
+R1(config-if)#ip address 192.168.1.65 255.255.255.224
+
+R1(config)#int g0/1.1000
+R1(config)#description Own
+
+R1(config-subif)#do sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0         10.0.0.1        YES NVRAM  up                    up  
+GigabitEthernet0/1         unassigned      YES unset  up                    up  
+GigabitEthernet0/1.100     192.168.1.1     YES NVRAM  up                    up  
+GigabitEthernet0/1.200     192.168.1.65    YES NVRAM  up                    up  
+GigabitEthernet0/1.1000    unassigned      YES unset  up                    up  
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+GigabitEthernet0/3         unassigned      YES unset  administratively down down
+```
+### Шаг 5.Настройте G0/1 на R2, затем G0/0/0 и статическую маршрутизацию для обоих маршрутизаторов,
+```sh
 R2#conf t
-Enter configuration commands, one per line.  End with CNTL/Z.
 R2(config)#int g0/1
 R2(config-if)#ip address 192.168.1.97 255.255.255.240
 R2(config-if)#no sh
 R2(config-if)#
 *Jun  2 15:22:27.806: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
 *Jun  2 15:22:28.806: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+```
+**Маршрутизатор R1**
+```sh
+R1(config-if)#int g0/0
+R1(config-if)#ip address 10.0.0.1255.255.255.252
+R1(config-if)#no sh
+R1(config-if)#
+R1(config-if)#
+*Jun  2 15:23:32.916: %LINK-3-UPDOWN: Interface GigabitEthernet0/0, changed state to up
+*Jun  2 15:23:33.917: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+R2(config-if)#
+R1>
+R1>
+R1>en
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+
+R1(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.2
+R1(config)#
+R1#wr
+Building configuration...
+*Jun  2 15:44:50.895: %SYS-5-CONFIG_I: Configured from console by console[OK]
+R1#
+*Jun  2 15:44:54.874: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
+*Jun  2 15:44:55.678: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk successfully.
+
+R1#ping 192.168.1.97
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.97, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 2/2/3 ms
+R1#
+```
+
+**Маршрутизатор R2**
+```sh
 R2(config-if)#int g0/0
-R2(config-if)#ip add
 R2(config-if)#ip address 10.0.0.2 255.255.255.252
 R2(config-if)#no sh
 R2(config-if)#
@@ -66,33 +152,25 @@ R2(config-if)#
 *Jun  2 15:23:32.916: %LINK-3-UPDOWN: Interface GigabitEthernet0/0, changed state to up
 *Jun  2 15:23:33.917: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
 R2(config-if)#
-*Jun  2 15:36:11.542: %SYS-5-CONFIG_I: Configured from console by console
-**************************************************************************
-* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
-* education. IOSv is provided as-is and is not supported by Cisco's      *
-* Technical Advisory Center. Any use or disclosure, in whole or in part, *
-* of the IOSv Software or Documentation to any third party for any       *
-* purposes is expressly prohibited except as otherwise authorized by     *
-* Cisco in writing.                                                      *
-**************************************************************************
 R2>
 R2>
 R2>en
 R2#conf t
 Enter configuration commands, one per line.  End with CNTL/Z.
+
 R2(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.1
 R2(config)#
 R2#wr
 Building configuration...
 *Jun  2 15:44:50.895: %SYS-5-CONFIG_I: Configured from console by console[OK]
-R2#
 *Jun  2 15:44:54.874: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
 *Jun  2 15:44:55.678: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk successfully.
+```
 
-
-## Switch
+### Шаг 6.Настройте базовые параметры каждого коммутатора.
+**Коммутатор S1**
+```sh
 Switch(config)#hostname S1
-S1(config)#no ip domain-loo
 S1(config)#no ip domain-lookup
 S1(config)#enable password class
 S1(config)#line con 0
@@ -101,9 +179,8 @@ S1(config-line)#line vty 0 4
 S1(config-line)#password cisco
 S1(config-line)#end
 S1#conf
-*Jun  2 15:58:34.049: %SYS-5-CONFIG_I: Configured from console by console t
+Jun  2 15:58:34.049: %SYS-5-CONFIG_I: Configured from console by console t
 Enter configuration commands, one per line.  End with CNTL/Z.
-S1(config)#service passwor
 S1(config)#service password-encryption
 S1(config)#banner motd # Attention For staff only #
 S1(config)#
@@ -114,17 +191,16 @@ Compressed configuration from 3121 bytes to 1512 bytes[OK]
 S1(config)#
 S1(config)#
 S1(config)#
-*Jun  2 15:59:39.023: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
-*Jun  2 15:59:39.751: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk successfully.
+Jun  2 15:59:39.023: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
+Jun  2 15:59:39.751: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk successfully.
 S1(config)#
 S1#clo
-*Jun  2 15:59:40.624: %SYS-5-CONFIG_I: Configured from console by consoleck set 16:01:00 02 jul 2022
+Jun  2 15:59:40.624: %SYS-5-CONFIG_I: Configured from console by consoleck set 16:01:00 02 jul 2022
 S1#
-*Jul  2 16:01:00.000: %SYS-6-CLOCKUPDATE: System clock has been updated from 16:00:09 UTC Thu Jun 2 2022 to 16:01:00 UTC Sat Jul 2 2022, configured from console by console.
+Jul  2 16:01:00.000: %SYS-6-CLOCKUPDATE: System clock has been updated from 16:00:09 UTC Thu Jun 2 2022 to 16:01:00 UTC Sat Jul 2 2022, configured from console by console.
 S1#
 S1#
 S1#clock update-calendar
-
 S1#copy running-config startup-config
 Destination filename [startup-config]?
 Building configuration...
@@ -132,79 +208,58 @@ Compressed configuration from 3180 bytes to 1556 bytes[OK]
 S1#
 Jul  2 16:02:38.518: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
 Jul  2 16:02:39.264: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk succes
+```
+**Коммутатор S2**
+```sh
+Switch(config)#hostname S2
+S2(config)#no ip domain-lookup
+S2(config)#enable password class
+S2(config)#line con 0
+S2(config-line)#password cisco
+S2(config-line)#line vty 0 4
+S2(config-line)#password cisco
+S2(config-line)#end
+S2#conf
+Jun  2 15:58:34.049: %SYS-5-CONFIG_I: Configured from console by console t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S2(config)#service password-encryption
+S2(config)#banner motd # Attention For staff only #
+S2(config)#do wr
+Building configuration...
+Compressed configuration from 3121 bytes to 1512 bytes[OK]
+Jun  2 15:59:39.023: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
+Jun  2 15:59:39.751: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk successfully.
+S2(config)#
+Jun  2 15:59:40.624: %SYS-5-CONFIG_I: Configured from console by consoleck set 16:01:00 02 jul 2022
+S2#
+Jul  2 16:01:00.000: %SYS-6-CLOCKUPDATE: System clock has been updated from 16:00:09 UTC Thu Jun 2 2022 to 16:01:00 UTC Sat Jul 2 2022, configured from console by console.
+S2#clock update-calendar
+S2#copy running-config startup-config
+Destination filename [startup-config]?
+Building configuration...
+Compressed configuration from 3180 bytes to 1556 bytes[OK]
+Jul  2 16:02:38.518: %GRUB-5-CONFIG_WRITING: GRUB configuration is being updated on disk. Please wait...
+Jul  2 16:02:39.264: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to disk succes
+```
 
-## Настройка Влан на свитчах(шаг 7-8)
+### Шаг 7.Создайте сети VLAN на коммутаторе S1.
+**Коммутатор S1**
+```sh
 S1(config)#vlan 100
 S1(config-vlan)#name Clients
 S1(config-vlan)#vlan 200
-S1(config-vlan)#QQ
-S1(config-vlan)#QQQ
-S1#
-Jul  2 16:27:34.778: %SYS-5-CONFIG_I: Configured from console by console
-S1#conf t
-Enter configuration commands, one per line.  End with CNTL/Z.
-S1(config)#vlan 200
 S1(config-vlan)#name Managment
-S1(config-vlan)#vlan 999
-S1(config-vlan)#name Parking_
-S1(config-vlan)#name Parking_Lot
-S1(config-vlan)#do sh vlan
-
-VLAN Name                             Status    Ports
----- -------------------------------- --------- -------------------------------
-1    default                          active    Gi0/0, Gi0/1, Gi0/2, Gi0/3
-                                                Gi1/0, Gi1/1, Gi1/2, Gi1/3
-100  Clients                          active
-200  Managment                        active
-1002 fddi-default                     act/unsup
-1003 token-ring-default               act/unsup
-1004 fddinet-default                  act/unsup
-1005 trnet-default                    act/unsup
-
-VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2
----- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------
-1    enet  100001     1500  -      -      -        -    -        0      0
-100  enet  100100     1500  -      -      -        -    -        0      0
-200  enet  100200     1500  -      -      -        -    -        0      0
-1002 fddi  101002     1500  -      -      -        -    -        0      0
-1003 tr    101003     1500  -      -      -        -    -        0      0
-1004 fdnet 101004     1500  -      -      -        ieee -        0      0
-1005 trnet 101005     1500  -      -      -        ibm  -        0      0
-
-Primary Secondary Type              Ports
-------- --------- ----------------- ------------------------------------------
-
-S1(config-vlan)#
-S1(config-vlan)#
-S1(config-vlan)#
-S1(config-vlan)#
-S1#co
-Jul  2 16:29:14.559: %SYS-5-CONFIG_I: Configured from console by consolenf t
-Enter configuration commands, one per line.  End with CNTL/Z.
 S1(config)#vlan 999
 S1(config-vlan)#name Parking_Lot
 S1(config-vlan)#vlan 1000
 S1(config-vlan)#name Own
-S1(config-vlan)#int vlan 200
-S1(config-if)#
-Jul  2 16:33:40.908: %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan200, ch              anged state to down
-S1(config-if)#ip add
-% Incomplete command.
 
-S1(config-if)#ip add
+S1(config-vlan)#int vlan 200
+S1(config-if)#no sh
 S1(config-if)#ip address 192.168.1.66 255.255.255.224
-S1(config-if)#ip def
-S1(config-if)#ip defalt
-S1(config-if)#ip defalt-gat
-S1(config-if)#ip defalt-gat?
-% Unrecognized command
-S1(config-if)#ex
-S1(config)#ip def
-S1(config)#ip default-gat
 S1(config)#ip default-gateway 192.168.1.65
-S1(config)#do sh int br
-                      ^
-% Invalid input detected at '^' marker.
+```
+**Коммутатор S2**
 
 S1(config)#do sh ip  int br
 Interface              IP-Address      OK? Method Status                Protocol

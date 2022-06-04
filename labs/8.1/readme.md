@@ -75,8 +75,7 @@ Jun  2 14:22:43.799: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to d
 ```sh
 R1(config)#int g0/1
 R1(config-if)#no sh
-R1(config-if)#exit
-R1(config)#int g0/1.100
+R1(config-if)#int g0/1.100
 R1(config-if)#encapsulation dot1Q 100
 R1(config-if)#description Clients
 R1(config-if)#ip address 192.168.1.1 255.255.255.192
@@ -99,7 +98,8 @@ GigabitEthernet0/1.1000    unassigned      YES unset  up                    up
 GigabitEthernet0/2         unassigned      YES unset  administratively down down
 GigabitEthernet0/3         unassigned      YES unset  administratively down down
 ```
-### Шаг 5.Настройте G0/1 на R2, затем G0/0/0 и статическую маршрутизацию для обоих маршрутизаторов,
+### Шаг 5.Настройте G0/1 на R2, затем G0/0/0 и статическую маршрутизацию для обоих маршрутизаторов.
+**Настройте G0/0/1 на R2 с первым IP-адресом подсети C, рассчитанным ранее.**
 ```sh
 R2#conf t
 R2(config)#int g0/1
@@ -109,6 +109,9 @@ R2(config-if)#
 *Jun  2 15:22:27.806: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
 *Jun  2 15:22:28.806: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
 ```
+
+**Настройте интерфейс G0/0/0 для каждого маршрутизатора на основе приведенной выше таблицы IP-адресации.**
+
 **Маршрутизатор R1**
 ```sh
 R1(config-if)#int g0/0
@@ -283,11 +286,6 @@ S1(config-if-range)#switchport access vlan 999
 S1(config-if-range)#int range g1/0-3
 S1(config-if-range)#switchport access vlan 999
 S1(config-if-range)#sh
-
-S1(config-if)#int g0/1
-S1(config-if)#no sh
-S1(config-if)#int g0/2
-S1(config-if)#no sh
 ```
 
 ### Шаг 8.Назначьте сети VLAN соответствующим интерфейсам коммутатора.
@@ -325,23 +323,61 @@ S1(config)#int g0/1
 S1(config-if)#switchport mode trunk
 S1(config-if)#switchport trunk native vlan 1000
 S1(config-if)#switchport trunk allowed vlan 100,200,1000
+
+S1(config)#do sh int g0/1 sw
+Name: Gi0/1
+Switchport: Enabled
+Administrative Mode: trunk
+Operational Mode: trunk
+Administrative Trunking Encapsulation: dot1q
+Operational Trunking Encapsulation: dot1q
+Negotiation of Trunking: On
+Access Mode VLAN: 1 (default)
+Trunking Native Mode VLAN: 1000 (Inactive)
+Administrative Native VLAN tagging: enabled
+Voice VLAN: none
+Administrative private-vlan host-association: none
+Administrative private-vlan mapping: none
+Administrative private-vlan trunk native VLAN: none
+Administrative private-vlan trunk Native VLAN tagging: enabled
+Administrative private-vlan trunk encapsulation: dot1q
+Administrative private-vlan trunk normal VLANs: none
+Administrative private-vlan trunk associations: none
+Administrative private-vlan trunk mappings: none
+Operational private-vlan: none
+Trunking VLANs Enabled: 100,200,1000
+Pruning VLANs Enabled: 2-1001
+Capture Mode Disabled
+Capture VLANs Allowed: ALL
+
+Protected: false
+Appliance trust: none
 ```
 
 ## Часть 2:	Настройка и проверка двух серверов DHCPv4 на R1.
 
 ### Шаг 1.	Настройте R1 с пулами DHCPv4 для двух поддерживаемых подсетей. Ниже приведен только пул DHCP для подсети A.
 ```sh
-R1(dhcp-config)#ip dhcp pool Managment
-R1(dhcp-config)#network 192.168.1.64 255.255.255.224
-R1(dhcp-config)#default-router 192.168.1.65
+R1(config)#ip dhcp excluded-address 192.168.1.1 192.168.1.6
+R1(config)#ip dhcp excluded-address 192.168.1.97 192.168.1.102
+
+R1(dhcp-config)#ip dhcp pool Clients
+R1(dhcp-config)#network 192.168.1.0 255.255.255.192
+R1(dhcp-config)#default-router 192.168.1.1
 R1(dhcp-config)#domain-name CCNA-lab.com
-R1(dhcp-config)#dns-server 192.168.1.65
+R1(dhcp-config)#dns-server 192.168.1.1
+R1(dhcp-config)#lease 2 12 30
+
+R1(dhcp-config)#ip dhcp pool R2_Client_LAN 
+R1(dhcp-config)#network 192.168.1.96 255.255.255.240
+R1(dhcp-config)#default-router 192.168.1.97
+R1(dhcp-config)#domain-name CCNA-lab.com
+R1(dhcp-config)#dns-server 192.168.1.97
 R1(dhcp-config)#lease 2 12 30
 Jun  3 15:32:58.706: %SYS-5-CONFIG_I: Configured from console by consolef t
 Enter configuration commands, one per line.  End with CNTL/Z.
-R1(config)#ip dhcp excluded-address 192.168.1.1 192.168.1.6
-R1(config)#ip dhcp excluded-address 192.168.1.97 192.168.1.102
-  
+R1(dhcp-config)#do wr
+
 R1#sh ip dhcp binding
 Bindings from all pools not associated with VRF:
 IP address          Client-ID/              Lease expiration        Type

@@ -243,7 +243,8 @@ Jul  2 16:02:39.264: %GRUB-5-CONFIG_WRITTEN: GRUB configuration was written to d
 ```
 
 ### Шаг 7.Создайте сети VLAN на коммутаторе S1.
-**Коммутатор S1**
+
+**Создайте необходимые VLAN на коммутаторе 1 и присвойте им имена из приведенной выше таблицы.**
 ```sh
 S1(config)#vlan 100
 S1(config-vlan)#name Clients
@@ -253,148 +254,52 @@ S1(config)#vlan 999
 S1(config-vlan)#name Parking_Lot
 S1(config-vlan)#vlan 1000
 S1(config-vlan)#name Own
+```
 
+**Настройте и активируйте интерфейс управления на S1 (VLAN 200), используя второй IP-адрес из подсети, рассчитанный ранее. Кроме того установите шлюз по умолчанию на S1**
+```sh
 S1(config-vlan)#int vlan 200
 S1(config-if)#no sh
 S1(config-if)#ip address 192.168.1.66 255.255.255.224
 S1(config)#ip default-gateway 192.168.1.65
 ```
-**Коммутатор S2**
 
-S1(config)#do sh ip  int br
-Interface              IP-Address      OK? Method Status                Protocol
-GigabitEthernet0/0     unassigned      YES unset  up                    up
-GigabitEthernet0/1     unassigned      YES unset  up                    up
-GigabitEthernet0/2     unassigned      YES unset  up                    up
-GigabitEthernet0/3     unassigned      YES unset  up                    up
-GigabitEthernet1/0     unassigned      YES unset  up                    up
-GigabitEthernet1/1     unassigned      YES unset  up                    up
-GigabitEthernet1/2     unassigned      YES unset  up                    up
-GigabitEthernet1/3     unassigned      YES unset  up                    up
-Vlan200                192.168.1.66    YES manual administratively down down
-S1(config)#sw m a vlan ?
-% Unrecognized command
-S1(config)#sw m a ?
-% Unrecognized command
-S1(config)#sw a ?
-% Unrecognized command
-S1(config)#sw m a vlan 200
-            ^
-% Invalid input detected at '^' marker.
+**Настройте и активируйте интерфейс управления на S2 (VLAN 1), используя второй IP-адрес из подсети, рассчитанный ранее. Кроме того, установите шлюз по умолчанию на S2**
+```sh
+S2(config-vlan)#int vlan 1
+S2(config-if)#no sh
+S2(config-if)#ip address 192.168.1.98 255.255.255.240
+S2(config)#ip default-gateway 192.168.1.97
+```
 
+**Назначьте все неиспользуемые порты S1 VLAN Parking_Lot, настройте их для статического режима доступа и административно деактивируйте их. На S2 административно деактивируйте все неиспользуемые порты**
+```sh
 S1(config)#int range g0/0
-S1(config-if-range)#sw m a vlan 999
-                           ^
-% Invalid input detected at '^' marker.
-
-S1(config-if-range)#sw
-S1(config-if-range)#switchport ?
-  access         Set access mode characteristics of the interface
-  autostate      Include or exclude this port from vlan link up calculation
-  dot1q          Set interface dot1q properties
-  host           Set port host
-  mode           Set trunking mode of the interface
-  nonegotiate    Device will not engage in negotiation protocol on this
-                 interface
-  port-security  Security related command
-  private-vlan   Set the private VLAN configuration
-  protected      Configure an interface to be a protected port
-  trunk          Set trunking characteristics of the interface
-  voice          Voice appliance attributes
-  <cr>
-
-S1(config-if-range)#switchport ac
-S1(config-if-range)#switchport access ?
-  vlan  Set VLAN when interface is in access mode
-
-S1(config-if-range)#switchport access vla
+S1(config-if-range)#sh
 S1(config-if-range)#switchport access vlan 999
 S1(config-if-range)#int range g0/3
+S1(config-if-range)#sh
 S1(config-if-range)#switchport access vlan 999
 S1(config-if-range)#int range g1/0-3
 S1(config-if-range)#switchport access vlan 999
 S1(config-if-range)#sh
-S1(config-if-range)#int g
-Jul  2 16:40:34.277: %LINK-5-CHANGED: Interface GigabitEthernet1/0, changed stat              e to administratively down
-Jul  2 16:40:34.324: %LINK-5-CHANGED: Interface GigabitEthernet1/1, changed stat              e to administratively down
-Jul  2 16:40:34.361: %LINK-5-CHANGED: Interface GigabitEthernet1/2, changed stat              e to administratively down
-Jul  2 16:40:34.395: %LINK-5-CHANGED: Interface GigabitEthernet1/3, changed stat              e to administratively down
-Jul  2 16:40:35.276: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthe              rnet1/0, changed state to down0/
-Jul  2 16:40:35.324: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthe              rnet1/1, changed state to down
-Jul  2 16:40:35.363: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthe              rnet1/2, changed state to down
-Jul  2 16:40:35.395: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthe              rnet1/3, changed state to down3
-S1(config-if)#sh
-S1(config-if)#int g0/
-Jul  2 16:40:42.895: %LINK-5-CHANGED: Interface GigabitEthernet0/3, changed stat              e to administratively down
-Jul  2 16:40:43.895: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthe              rnet0/3, changed state to down0~
-                      ^
-% Invalid input detected at '^' marker.
 
-S1(config)#int g0/0
-S1(config-if)#sh
-S1(config-if)#
-Jul  2 16:40:50.444: %LINK-5-CHANGED: Interface GigabitEthernet0/0, changed stat              e to administratively down
-Jul  2 16:40:51.444: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthe              rnet0/0, changed state to down
-S1(config-if)#int vlan 200
-S1(config-if)#no sh
-S1(config-if)#int
-Jul  2 16:41:04.670: %LINK-3-UPDOWN: Interface Vlan200, changed state to downg0/              2
-S1(config-if)#no sh
 S1(config-if)#int g0/1
 S1(config-if)#no sh
 S1(config-if)#int g0/2
 S1(config-if)#no sh
-S1(config-if)#do sh ip unt br
-                       ^
-% Invalid input detected at '^' marker.
+```
 
-S1(config-if)#do sh ip int br
-Interface              IP-Address      OK? Method Status                Protocol
-GigabitEthernet0/0     unassigned      YES unset  administratively down down
-GigabitEthernet0/1     unassigned      YES unset  up                    up
-GigabitEthernet0/2     unassigned      YES unset  up                    up
-GigabitEthernet0/3     unassigned      YES unset  administratively down down
-GigabitEthernet1/0     unassigned      YES unset  administratively down down
-GigabitEthernet1/1     unassigned      YES unset  administratively down down
-GigabitEthernet1/2     unassigned      YES unset  administratively down down
-GigabitEthernet1/3     unassigned      YES unset  administratively down down
-Vlan200                192.168.1.66    YES manual down                  down
-S1(config-if)#int g0/2
-S1(config-if)#sw a v 200
-S1(config-if)#int vl
-S1(config-if)#int vla
-S1(config-if)#int vlan 200
-S1(config-if)#no sh
-S1(config-if)#
-Jul  2 16:43:26.221: %LINK-3-UPDOWN: Interface Vlan200, changed state to up
-Jul  2 16:43:27.220: %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan200, changed state to up
-S1(config-if)#
-S1(config-if)#
-S1(config-if)#do sh ip int br
-Interface              IP-Address      OK? Method Status                Protocol
-GigabitEthernet0/0     unassigned      YES unset  administratively down down
-GigabitEthernet0/1     unassigned      YES unset  up                    up
-GigabitEthernet0/2     unassigned      YES unset  up                    up
-GigabitEthernet0/3     unassigned      YES unset  administratively down down
-GigabitEthernet1/0     unassigned      YES unset  administratively down down
-GigabitEthernet1/1     unassigned      YES unset  administratively down down
-GigabitEthernet1/2     unassigned      YES unset  administratively down down
-GigabitEthernet1/3     unassigned      YES unset  administratively down down
-Vlan200                192.168.1.66    YES manual up                    up
-S1(config-if)#
-S1(config-if)#
-S1(config-if)#
-S1(config-if)#do sh vlkan
-                      ^
-% Invalid input detected at '^' marker.
-
+### Шаг 8.Назначьте сети VLAN соответствующим интерфейсам коммутатора.
+```sh
+S1(config-if)#sw a v 100
 S1(config-if)#do sh vlan
 
 VLAN Name                             Status    Ports
 ---- -------------------------------- --------- -------------------------------
 1    default                          active    Gi0/1
-100  Clients                          active
-200  Managment                        active    Gi0/2
+100  Clients                          active    Gi0/2
+200  Managment                        active    
 999  Parking_Lot                      active    Gi0/0, Gi0/3, Gi1/0, Gi1/1
                                                 Gi1/2, Gi1/3
 1000 Own                              active
@@ -412,10 +317,20 @@ VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2
 1000 enet  101000     1500  -      -      -        -    -        0      0
 1002 fddi  101002     1500  -      -      -        -    -        0      0
 1003 tr    101003     1500  -      -      -        -    -        0      0
+```
 
+### Шаг 9.Вручную настройте интерфейс S1 F0/5(g0/1) в качестве транка 802.1Q.
+```sh
+S1(config)#int g0/1
+S1(config-if)#switchport mode trunk
+S1(config-if)#switchport trunk native vlan 1000
+S1(config-if)#switchport trunk allowed vlan 100,200,1000
+```
 
-  ## Настройка DHCPv4 na R1
-  
+## Часть 2:	Настройка и проверка двух серверов DHCPv4 на R1.
+
+### Шаг 1.	Настройте R1 с пулами DHCPv4 для двух поддерживаемых подсетей. Ниже приведен только пул DHCP для подсети A.
+```sh
 R1(dhcp-config)#ip dhcp pool Managment
 R1(dhcp-config)#network 192.168.1.64 255.255.255.224
 R1(dhcp-config)#default-router 192.168.1.65
@@ -427,20 +342,14 @@ Enter configuration commands, one per line.  End with CNTL/Z.
 R1(config)#ip dhcp excluded-address 192.168.1.1 192.168.1.6
 R1(config)#ip dhcp excluded-address 192.168.1.97 192.168.1.102
   
-  
-  
-  
-  R1#sh ip dhcp binding
+R1#sh ip dhcp binding
 Bindings from all pools not associated with VRF:
 IP address          Client-ID/              Lease expiration        Type
                     Hardware address/
                     User name
 192.168.1.7         0100.5079.6668.05       Jun 06 2022 05:15 AM    Automatic
-R1#
-R1#
-R1#
-R1#sh ip dhcp pool
 
+R1#sh ip dhcp pool
 Pool Clients :
  Utilization mark (high/low)    : 100 / 0
  Subnet size (first/next)       : 0 / 0
@@ -450,7 +359,6 @@ Pool Clients :
  1 subnet is currently in the pool :
  Current index        IP address range                    Leased addresses
  192.168.1.8          192.168.1.1      - 192.168.1.62      1
-
 Pool R2_Client_LAN :
  Utilization mark (high/low)    : 100 / 0
  Subnet size (first/next)       : 0 / 0
@@ -460,11 +368,7 @@ Pool R2_Client_LAN :
  1 subnet is currently in the pool :
  Current index        IP address range                    Leased addresses
  192.168.1.97         192.168.1.97     - 192.168.1.110     0
-R1#
-R1#
-R1#
-R1#
-R1#
+
 R1#sh ip dhcp server stat
 Memory usage         34188
 Address pools        2
@@ -474,7 +378,6 @@ Manual bindings      0
 Expired bindings     0
 Malformed messages   0
 Secure arp entries   0
-
 Message              Received
 BOOTREQUEST          0
 DHCPDISCOVER         18
@@ -482,7 +385,6 @@ DHCPREQUEST          2
 DHCPDECLINE          0
 DHCPRELEASE          0
 DHCPINFORM           0
-
 Message              Sent
 BOOTREPLY            0
 DHCPOFFER            2
@@ -491,6 +393,59 @@ DHCPNAK              0
 R1#
 R1#
 R1#
+```
 
+## Часть 3:	Настройка и проверка DHCP-ретрансляции на R2
 
-## Настройка и проверка DHCP-ретрансляции на R2
+### Шаг 1.	Настройка R2 в качестве агента DHCP-ретрансляции для локальной сети на G0/0/1(g0/1).
+```sh
+R2(config)#int g0/1
+R2(config-if)#ip helper-address 10.0.0.1
+R2(config-if)#do wr
+```
+### Шаг 2.	Попытка получить IP-адрес от DHCP на PC-B.
+
+**Из командной строки компьютера PC-B выполните команду ipconfig /all.**
+![image](https://user-images.githubusercontent.com/99355274/172020690-4b5226bc-e71d-4cbb-9415-6851794b5897.png)
+
+**После завершения процесса обновления выполните команду ipconfig для просмотра новой информации об IP-адресе.**
+![image](https://user-images.githubusercontent.com/99355274/172020701-a3d63aa1-9619-4a1e-8a74-b212de726182.png)
+
+**Проверьте подключение с помощью пинга IP-адреса интерфейса R1 G0/0/1.**
+![image](https://user-images.githubusercontent.com/99355274/172020706-cefaec5b-ec9e-4a81-a9c2-19f1f9a7cd8e.png)
+
+**Выполните show ip dhcp binding для R1 для проверки назначений адресов в DHCP**
+R1(config)#do sh ip dhcp binding
+Bindings from all pools not associated with VRF:
+IP address          Client-ID/              Lease expiration        Type
+                    Hardware address/
+                    User name
+192.168.1.7         0150.0000.0100.00       Jun 07 2022 06:51 AM    Automatic
+192.168.1.104       0150.0000.0200.00       Jun 07 2022 06:47 AM    Automatic
+
+**Выполните команду show ip dhcp server statistics для проверки сообщений DHCP.**
+R1(config)#do sh ip dhcp server  stat
+Memory usage         42695
+Address pools        2
+Database agents      0
+Automatic bindings   2
+Manual bindings      0
+Expired bindings     0
+Malformed messages   0
+Secure arp entries   0
+
+Message              Received
+BOOTREQUEST          0
+DHCPDISCOVER         10
+DHCPREQUEST          7
+DHCPDECLINE          0
+DHCPRELEASE          0
+DHCPINFORM           2
+
+Message              Sent
+BOOTREPLY            0
+DHCPOFFER            3
+DHCPACK              4
+DHCPNAK              0
+R1(config)#
+

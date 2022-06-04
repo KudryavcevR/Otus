@@ -415,6 +415,7 @@ R2(config-if)#do wr
 ![image](https://user-images.githubusercontent.com/99355274/172020706-cefaec5b-ec9e-4a81-a9c2-19f1f9a7cd8e.png)
 
 **Выполните show ip dhcp binding для R1 для проверки назначений адресов в DHCP**
+```sh
 R1(config)#do sh ip dhcp binding
 Bindings from all pools not associated with VRF:
 IP address          Client-ID/              Lease expiration        Type
@@ -448,4 +449,4 @@ DHCPOFFER            3
 DHCPACK              4
 DHCPNAK              0
 R1(config)#
-
+```

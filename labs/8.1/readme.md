@@ -406,12 +406,15 @@ R2(config-if)#do wr
 ### Шаг 2.	Попытка получить IP-адрес от DHCP на PC-B.
 
 **Из командной строки компьютера PC-B выполните команду ipconfig /all.**
+
 ![image](https://user-images.githubusercontent.com/99355274/172020690-4b5226bc-e71d-4cbb-9415-6851794b5897.png)
 
 **После завершения процесса обновления выполните команду ipconfig для просмотра новой информации об IP-адресе.**
+
 ![image](https://user-images.githubusercontent.com/99355274/172020701-a3d63aa1-9619-4a1e-8a74-b212de726182.png)
 
 **Проверьте подключение с помощью пинга IP-адреса интерфейса R1 G0/0/1.**
+
 ![image](https://user-images.githubusercontent.com/99355274/172020706-cefaec5b-ec9e-4a81-a9c2-19f1f9a7cd8e.png)
 
 **Выполните show ip dhcp binding для R1 для проверки назначений адресов в DHCP**

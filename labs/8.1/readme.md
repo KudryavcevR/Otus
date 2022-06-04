@@ -423,8 +423,9 @@ IP address          Client-ID/              Lease expiration        Type
                     User name
 192.168.1.7         0150.0000.0100.00       Jun 07 2022 06:51 AM    Automatic
 192.168.1.104       0150.0000.0200.00       Jun 07 2022 06:47 AM    Automatic
-
+```
 **Выполните команду show ip dhcp server statistics для проверки сообщений DHCP.**
+```sh
 R1(config)#do sh ip dhcp server  stat
 Memory usage         42695
 Address pools        2

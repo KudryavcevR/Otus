@@ -1,4 +1,35 @@
+![image](https://user-images.githubusercontent.com/99355274/172456904-1b4b103b-177a-45a7-bbe8-2f802b6ecb82.png)
+
+## Часть 1. Создание сети и настройка основных параметров устройства
+### Шаг 1. Создайте сеть согласно топологии.
+![image](https://user-images.githubusercontent.com/99355274/172456987-09525db8-8dd2-4367-8428-224ab59d8f68.png)
+
+### Шаг 2. Произведите базовую настройку маршрутизаторов.
+```sh
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname R1
+R1(config)#no ip domain-lookup
+R1(config)#enable password class
+R1(config)#line con 0
+R1(config-line)#password cisco
+R1(config-line)#line vty 0 4
+R1(config-line)#password cisco
+R1(config-line)#login
+R1(config-line)#exit
+R1(config)#serv
+R1(config)#service enc
+R1(config)#service password-encryption
+R1(config)#banner motd ## Attention! For staff only!! #
+R1(config)#do wr
+Building configuration...
+[OK]
+R1(config)#
+```
+### Шаг 3. Настройте базовые параметры каждого коммутатора.
+
 ## Часть 2. Настройка и проверка базовой работы протокола OSPFv2 для одной области
+
 ### Шаг 1. Настройте адреса интерфейса и базового OSPFv2 на каждом маршрутизаторе.
 
 **Маршрутизатор R2**
@@ -50,7 +81,6 @@ Sending 5, 100-byte ICMP Echos to 192.168.1.1, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 4/4/5 ms
 R1#
-
 ```
 ## Часть 3. Оптимизация и проверка конфигурации OSPFv2 для одной области
 ### Шаг 1. Реализация различных оптимизаций на каждом маршрутизаторе.

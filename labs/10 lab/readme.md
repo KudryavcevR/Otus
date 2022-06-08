@@ -5,9 +5,8 @@
 ![image](https://user-images.githubusercontent.com/99355274/172456987-09525db8-8dd2-4367-8428-224ab59d8f68.png)
 
 ### Шаг 2. Произведите базовую настройку маршрутизаторов.
+**Маршрутизатор R1**
 ```sh
-R1#conf t
-Enter configuration commands, one per line.  End with CNTL/Z.
 Router(config)#hostname R1
 R1(config)#no ip domain-lookup
 R1(config)#enable password class
@@ -17,7 +16,6 @@ R1(config-line)#line vty 0 4
 R1(config-line)#password cisco
 R1(config-line)#login
 R1(config-line)#exit
-R1(config)#serv
 R1(config)#service enc
 R1(config)#service password-encryption
 R1(config)#banner motd ## Attention! For staff only!! #
@@ -26,8 +24,60 @@ Building configuration...
 [OK]
 R1(config)#
 ```
+**Маршрутизатор R2**
+```sh
+Router(config)#hostname R2
+R2(config)#no ip domain-lookup
+R2(config)#enable password class
+R2(config)#line con 0
+R2(config-line)#password cisco
+R2(config-line)#line vty 0 4
+R2(config-line)#password cisco
+R2(config-line)#login
+R2(config-line)#exit
+R2(config)#service password-encryption
+R2(config)#banner motd ## Attention! For staff only!! #
+R2(config)#do wr
+Building configuration...
+[OK]
+```
 ### Шаг 3. Настройте базовые параметры каждого коммутатора.
-
+**Коммутатор S1**
+```sh
+Switch(config)#hostname S1
+S1(config)#no ip domain-lookup
+S1(config)#enable password class
+S1(config)#line con 0
+S1(config-line)#password cisco
+S1(config-line)#line vty 0 4
+S1(config-line)#password cisco
+S1(config-line)#login
+S1(config-line)#exit
+S1(config)#service password-encryption
+S1(config)#banner motd ## Attention! For staff only!! #
+S1(config)#do wr
+Building configuration...
+[OK]
+S1(config)#
+```
+**Коммутатор S2**
+```sh
+Switch(config)#hostname S2
+S2(config)#no ip domain-lookup
+S2(config)#enable password class
+S2(config)#line con 0
+S2(config-line)#password cisco
+S2(config-line)#line vty 0 4
+S2(config-line)#password cisco
+S2(config-line)#login
+S2(config-line)#exit
+S2(config)#service password-encryption
+S2(config)#banner motd ## Attention! For staff only!! #
+S2(config)#do wr
+Building configuration...
+[OK]
+S2(config)#
+```
 ## Часть 2. Настройка и проверка базовой работы протокола OSPFv2 для одной области
 
 ### Шаг 1. Настройте адреса интерфейса и базового OSPFv2 на каждом маршрутизаторе.
@@ -55,7 +105,30 @@ R2(config-if)#router ospf 56
 R2(config-router)#router-id 2.2.2.2
 R2(config-router)#network 10.53.0.0 0.0.0.255 area 0
 Jun  7 16:38:34.679: %OSPF-5-ADJCHG: Process 56, Nbr 1.1.1.1 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
-R2(config-router)#network 192.168.1.1 255.255.255.255 area 0
+R2(config-router)#network 192.168.1.0 255.255.255.255 area 0
+```
+
+**Маршрутизатор R1**
+```sh
+Router(config)#hostname R1
+R1(config)#no ip domain-lookup
+R1(config)#int g0/0
+R1(config-if)#ip address 10.53.0.1 255.255.255.0
+R1(config-if)#no sh
+
+R1(config-if)#int loopback1
+Jun  7 16:37:12.997: %LINK-3-UPDOWN: Interface GigabitEthernet0/0, changed state to up
+Jun  7 16:37:13.997: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to uppback1
+R1(config-if)#
+Jun  7 16:37:17.127: %LINEPROTO-5-UPDOWN: Line protocol on Interface Loopback1, changed state to up add
+R1(config-if)#ip address 172.16.1.1 255.255.255.0
+R1(config-if)#no sh
+
+R1(config-if)#router ospf 56
+R1(config-router)#router-id 1.1.1.1
+R1(config-router)#network 10.53.0.0 0.0.0.255 area 0
+Jun  7 16:38:34.679: %OSPF-5-ADJCHG: Process 56, Nbr 2.2.2.2 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+R1(config-router)#network 172.16.1.0 255.255.255.255 area 0
 
 R1#sh ip route ospf
 Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
@@ -73,8 +146,6 @@ Gateway of last resort is not set
       192.168.1.0/32 is subnetted, 1 subnets
 O        192.168.1.1 [110/1501] via 10.53.0.2, 00:16:08, GigabitEthernet0/0
 
-R2(config-if)#ip ospf cost 1000
-
 R1#ping 192.168.1.1
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 192.168.1.1, timeout is 2 seconds:
@@ -85,21 +156,37 @@ R1#
 ## Часть 3. Оптимизация и проверка конфигурации OSPFv2 для одной области
 ### Шаг 1. Реализация различных оптимизаций на каждом маршрутизаторе.
 
+**На R1 настройте приоритет OSPF**
 ```sh
+R1(config)#int g0/0
 R1(config-if)#ip ospf priority 50
-R1(config-if)#ip ospf hello-interval 30
+```
 
+**Настройте таймеры OSPF**
+```sh
+R1(config)#int g0/0
+R1(config-if)#ip ospf hello-interval 30
+```
+```sh
+R2(config)#int g0/0
+R2(config-if)#ip ospf hello-interval 30
+```
+
+**На R1 настройте статический маршрут по умолчанию, который использует интерфейс Loopback 1. Затем распространите маршрут по умолчанию в OSPF**
+```sh
 R1(config)#ip route 0.0.0.0 0.0.0.0 loopback1
 R1(config)#router ospf 56
 R1(config-router)#default-information originate
 ```
 
+**Добавьте конфигурацию, необходимую для OSPF и конфигурацию для предотвращения отправки объявлений OSPF в сеть Loopback 1.**
 ```sh
 R2(config-if)#ip ospf network point-to-point
 R2(config-if)#router ospf 56
 R2(config-router)#passive-interface loopback1
 ```
 
+**Измените базовую пропускную способность для маршрутизаторов. После этой настройки перезапустите OSPF с помощью команды clear ip ospf process**
 ```sh
 R1(config)#int g0/0
 R1(config-if)#ip ospf cost 1501

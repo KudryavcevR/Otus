@@ -167,3 +167,56 @@ Gi0/1       20,30,1000
 ```
 ## Часть 4. Настройте маршрутизацию.
 ### Шаг 1. Настройка маршрутизации между сетями VLAN на R1.
+```sh
+R1(config)#int g0/1
+R1(config-if)#no sh
+R1(config-if)#int g0/1.20
+R1(config-subif)#encapsulation dot1Q 20
+R1(config-subif)#ip address 10.20.0.1 255.255.255.0
+R1(config-subif)#description Managment
+R1(config-subif)#int g0/1.30
+R1(config-subif)#encapsulation dot1Q 30
+R1(config-subif)#ip address 10.30.0.1 255.255.255.0
+R1(config-subif)#description Operations
+R1(config-subif)#int g0/1.40
+R1(config-subif)#encapsulation dot1Q 40
+R1(config-subif)#ip address 10.40.0.1 255.255.255.0
+R1(config-subif)#description Sales
+R1(config-subif)#int g0/1.1000
+R1(config-subif)#des
+R1(config-subif)#description Own
+R1(config-subif)#ex
+R1(config)#
+```
+```sh
+R1(config)#int loopback1
+R1(config-if)#ip address 172.16.1.1 255.255.255.0
+R1(config-if)#no sh
+R1(config-if)#
+
+R1#sh ip int br
+Interface                  IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0         unassigned      YES unset  administratively down down
+GigabitEthernet0/1         unassigned      YES unset  up                    up  
+GigabitEthernet0/1.20      10.20.0.1       YES manual up                    up  
+GigabitEthernet0/1.30      10.30.0.1       YES manual up                    up  
+GigabitEthernet0/1.40      10.40.0.1       YES manual up                    up  
+GigabitEthernet0/1.1000    unassigned      YES unset  up                    up  
+GigabitEthernet0/2         unassigned      YES unset  administratively down down
+GigabitEthernet0/3         unassigned      YES unset  administratively down down
+Loopback1                  172.16.1.1      YES manual up                    up  
+```
+### Шаг 2. Настройка интерфейса R2 g0/0/1 с использованием адреса из таблицы и маршрута по умолчанию с адресом следующего перехода 10.20.0.1
+```sh
+R2(config)#int g0/1
+R2(config-if)#no sh
+R2(config-if)#ip address 10.20.0.4 255.255.255.0
+R2(config-if)#ex
+R2(config)#ip default-gateway 10.20.0.1
+R2(config)#
+```
+## Часть 5. Настройте удаленный доступ
+### Шаг 1. Настройте все сетевые устройства для базовой поддержки SSH.
+```sh
+
+```

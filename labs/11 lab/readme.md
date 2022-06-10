@@ -1,4 +1,4 @@
-## Часть 1. Создание сети и настройка основных параметров устройства
+## Часть 1: Создание сети и настройка основных параметров устройства
 ### Шаг 1. Создайте сеть согласно топологии.
 ```sh
 Router(config)#hostname R1
@@ -33,7 +33,7 @@ S1(config)#service password-encryption
 S1(config)#banner motd # Attention! For staff only! #
 S1(config)#do wr
 ```
-## Часть 2. Настройка сетей VLAN на коммутаторах.
+## Часть 2: Настройка сетей VLAN на коммутаторах.
 ### Шаг 1. Создайте сети VLAN на коммутаторах.
 ```sh
 S1(config)#vlan 20
@@ -165,7 +165,7 @@ Port        Vlans in spanning tree forwarding state and not pruned
 Gi0/0       20,30,1000
 Gi0/1       20,30,1000
 ```
-## Часть 4. Настройте маршрутизацию.
+## Часть 4: Настройте маршрутизацию.
 ### Шаг 1. Настройка маршрутизации между сетями VLAN на R1.
 ```sh
 R1(config)#int g0/1
@@ -215,8 +215,51 @@ R2(config-if)#ex
 R2(config)#ip default-gateway 10.20.0.1
 R2(config)#
 ```
-## Часть 5. Настройте удаленный доступ
+## Часть 5: Настройте удаленный доступ
 ### Шаг 1. Настройте все сетевые устройства для базовой поддержки SSH.
 ```sh
-
+R1(config)#username SSHadmin secret $cisco123!
+R1(config)#ip domain name ccna-lab.com
+R1(config)#crypto key generate rsa modulus 1024
+R1(config)#line vty 0 4
+R1(config)#transport input ssh
+R1(config)#ip ssh version 2
 ```
+### Шаг 2. Включите защищенные веб-службы с проверкой подлинности на R1.
+```sh
+R1(config)#ip http secure-server
+R1(config)# ip http authentication local
+```
+## Часть 6: Проверка подключения
+### Шаг 1. Настройте узлы ПК.
+
+![image](https://user-images.githubusercontent.com/99355274/173118441-9afa8c8b-d77d-41a5-a047-514c3ee93c46.png)
+
+![image](https://user-images.githubusercontent.com/99355274/173118504-875f416e-a317-4b6f-96af-fe6242ed5d95.png)
+
+### Шаг 2. Выполните следующие тесты. Эхозапрос должен пройти успешно.
+
+![image](https://user-images.githubusercontent.com/99355274/173132732-bb85fe76-01e7-4270-ac7f-2e05a7cd1d4e.png)
+
+![image](https://user-images.githubusercontent.com/99355274/173132775-34bfcfc2-9e07-4665-b0df-ff6004834159.png)
+
+![image](https://user-images.githubusercontent.com/99355274/173132964-fe1c64e0-f604-4511-96df-b3b5d98d22fe.png)
+
+![image](https://user-images.githubusercontent.com/99355274/173132995-875b784c-c4e1-4aa4-96a6-b70e5463df99.png)
+
+![image](https://user-images.githubusercontent.com/99355274/173133047-4629d9eb-df19-4235-99bf-612b864ec4ce.png)
+
+![image](https://user-images.githubusercontent.com/99355274/173133074-b5023b7a-867d-4ac0-bf76-3c1f298538d8.png)
+
+## Часть 7: Настройка и проверка списков контроля доступа (ACL)
+
+
+### Шаг 1. Проанализируйте требования к сети и политике безопасности для планирования реализации ACL.
+ 
+### Шаг 2. Разработка и применение расширенных списков доступа, которые будут соответствовать требованиям политики безопасности.
+ 
+### Шаг 3. Убедитесь, что политики безопасности применяются развернутыми списками доступа.
+
+
+
+

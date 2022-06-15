@@ -282,25 +282,19 @@ R1(config-ext-nacl)#int g0/1.30
 R1(config-subif)#ip access-group ICMP_OP in
 ```
 ### Шаг 3. Убедитесь, что политики безопасности применяются развернутыми списками доступа.
-**PC-A	Ping	10.40.0.10	Сбой | PC-A	Ping	10.20.0.1	Успех**
+
 ![image](https://user-images.githubusercontent.com/99355274/173897827-88432483-a9e0-48ed-a655-33c654543b39.png)
 
-**PC-B	Ping	10.30.0.10	Сбой | PC-B	Ping	10.20.0.1	Сбой**
 ![image](https://user-images.githubusercontent.com/99355274/173898217-90e436fa-b39a-458b-af07-9a7de2ecf046.png)
 
-**PC-B	Ping	172.16.1.1	Успех**
 ![image](https://user-images.githubusercontent.com/99355274/173898278-72ffe15e-0de3-423b-a646-0ca63f95cb84.png)
 
-**PC-B	HTTPS	10.20.0.1	Сбой**
 ![image](https://user-images.githubusercontent.com/99355274/173898429-a7b4ae1a-3ec7-4c2e-9e54-8a185a6daa7c.png)
 
-**PC-B	HTTPS	172.16.1.1	Успех**
 ![image](https://user-images.githubusercontent.com/99355274/173898526-883ea5fe-575d-4bea-ab8c-c2a3dd60a1d7.png)
 
-**PC-B	SSH	10.20.0.4	Сбой**
 ![image](https://user-images.githubusercontent.com/99355274/173899160-fffb889d-a62e-4865-bbfd-79844d5a4cd4.png)
 
-**PC-B	SSH	172.16.1.1	Успех**
 ![image](https://user-images.githubusercontent.com/99355274/173899245-abd60d52-2b5a-43b4-b2ab-cec7cedbc562.png)
 
 

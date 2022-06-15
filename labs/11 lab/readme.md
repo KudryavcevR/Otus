@@ -364,21 +364,37 @@ R1(config)# ip http authentication local
 ## Часть 6: Проверка подключения
 ### Шаг 1. Настройте узлы ПК.
 
+**PC-A**
+
 ![image](https://user-images.githubusercontent.com/99355274/173118441-9afa8c8b-d77d-41a5-a047-514c3ee93c46.png)
+
+**PC-B**
 
 ![image](https://user-images.githubusercontent.com/99355274/173118504-875f416e-a317-4b6f-96af-fe6242ed5d95.png)
 
 ### Шаг 2. Выполните следующие тесты. Эхозапрос должен пройти успешно.
 
+**PC-A ping 10.40.0.10 | 10.20.0.1**
+
 ![image](https://user-images.githubusercontent.com/99355274/173132732-bb85fe76-01e7-4270-ac7f-2e05a7cd1d4e.png)
+
+**PC-B ping 10.30.0.10 | 10.20.0.1 | 172.16.1.1**
 
 ![image](https://user-images.githubusercontent.com/99355274/173132775-34bfcfc2-9e07-4665-b0df-ff6004834159.png)
 
+**PC-B https 10.20.0.1**
+
 ![image](https://user-images.githubusercontent.com/99355274/173132964-fe1c64e0-f604-4511-96df-b3b5d98d22fe.png)
+
+**PC-B https 172.16.1.1**
 
 ![image](https://user-images.githubusercontent.com/99355274/173132995-875b784c-c4e1-4aa4-96a6-b70e5463df99.png)
 
+**PC-B ssh 10.20.0.1**
+
 ![image](https://user-images.githubusercontent.com/99355274/173133047-4629d9eb-df19-4235-99bf-612b864ec4ce.png)
+
+**PC-B ssh 172.16.1.1**
 
 ![image](https://user-images.githubusercontent.com/99355274/173133074-b5023b7a-867d-4ac0-bf76-3c1f298538d8.png)
 
@@ -413,25 +429,33 @@ R1(config-ext-nacl)#int g0/1.30
 R1(config-subif)#ip access-group ICMP_OP in
 ```
 ### Шаг 3. Убедитесь, что политики безопасности применяются развернутыми списками доступа.
+
 **PC-A ping 10.40.0.10 | 10.20.0.1**
+
 ![image](https://user-images.githubusercontent.com/99355274/173897827-88432483-a9e0-48ed-a655-33c654543b39.png)
 
 **PC-B ping 10.30.0.10 | 10.20.0.1**
+
 ![image](https://user-images.githubusercontent.com/99355274/173898217-90e436fa-b39a-458b-af07-9a7de2ecf046.png)
 
 **PC-B ping 172.16.1.1**
+
 ![image](https://user-images.githubusercontent.com/99355274/173898278-72ffe15e-0de3-423b-a646-0ca63f95cb84.png)
 
 **PC-B https 10.20.0.1**
+
 ![image](https://user-images.githubusercontent.com/99355274/173898429-a7b4ae1a-3ec7-4c2e-9e54-8a185a6daa7c.png)
 
 **PC-B https 172.16.1.1**
+
 ![image](https://user-images.githubusercontent.com/99355274/173898526-883ea5fe-575d-4bea-ab8c-c2a3dd60a1d7.png)
 
-**PC-B ssh 10.20.0.4*
+**PC-B ssh 10.20.0.4**
+
 ![image](https://user-images.githubusercontent.com/99355274/173899160-fffb889d-a62e-4865-bbfd-79844d5a4cd4.png)
 
 **PC-B ssh 172.16.1.1**
+
 ![image](https://user-images.githubusercontent.com/99355274/173899245-abd60d52-2b5a-43b4-b2ab-cec7cedbc562.png)
 
 

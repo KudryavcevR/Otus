@@ -1,8 +1,101 @@
+## Часть 1:Создание сети и настройка основных параметров устройства.
 
+### 1.1 Подключите кабели сети согласно приведенной топологии.
+![image](https://user-images.githubusercontent.com/99355274/174094193-6578dbb1-7988-4ec2-a070-cb7479582db1.png)
+
+### 1.2 Произведите базовую настройку маршрутизаторов.
+**Коммутатор R1**
+```sh
+Router(config)#hostname R1
+R1(config)#no ip domain-lookup
+R1(config)#enable password class
+R1(config)#line con 0
+R1(config-line)#password cisco
+R1(config-line)#line vty 0 4
+R1(config-line)#password cisco
+R1(config-line)#login
+R1(config-line)#exit
+R1(config)#service password-encryption
+R1(config)#banner motd # Attentions! For staff only!!! #
+R1(config)#int g0/0
+R1(config-if)#ip address 209.165.200.230 255.255.255.248
+R1(config-if)#no sh
+R1(config-if)#int g0/1
+R1(config-if)#ip address 192.168.1.1 255.255.255.0
+R1(config-if)#exit
+R1(config)#ip route 0.0.0.0 0.0.0.0 209.165.200.225
+R1(config)#do wr
+```
+**Коммутатор R2**
+```sh
+Router(config)#hostname R2
+R2(config)#no ip domain-lookup
+R2(config)#enable password class
+R2(config)#line con 0
+R2(config-line)#password cisco
+R2(config-line)#line vty 0 4
+R2(config-line)#password cisco
+R2(config-line)#login
+R2(config-line)#exit
+R2(config)#service password-encryption
+R2(config)#banner motd # Attentions! For staff only!!! #
+R2(config)#int g0/0
+R2(config-if)#ip address 209.165.200.225 255.255.255.248
+R2(config-if)#no sh
+R2(config-if)#int loopback1
+R2(config-if)#ip address 209.165.200.1 255.255.255.224
+R2(config-if)#exit
+R2(config)#ip route 0.0.0.0 0.0.0.0 209.165.200.230
+R2(config)#do wr
+```
+### 1.3 Настройте базовые параметры каждого коммутатора.
+**Коммутатор S1**
+```sh
+Switch(config)#hostname S1
+S1(config)#no ip domain-lookup
+S1(config)#enable password class
+S1(config)#line con 0
+S1(config-line)#password cisco
+S1(config-line)#line vty 0 4
+S1(config-line)#password cisco
+S1(config-line)#login
+S1(config-line)#exit
+S1(config)#service password-encryption
+S1(config)#banner motd # Attentions! For staff only!!! #
+S2(config)#int range g1/0-3
+S2(config-if)#sh
+S1(config-if)#int vlan 1
+S1(config-if)#ip address 192.168.1.2 255.255.255.0
+S1(config-if)#exit
+S1(config)#ip route 0.0.0.0 0.0.0.0 192.168.1.1
+S1(config)#do wr
+```
+**Коммутатор S2**
+```sh
+Switch(config)#hostname S2
+S2(config)#no ip domain-lookup
+S2(config)#enable password class
+S2(config)#line con 0
+S2(config-line)#password cisco
+S2(config-line)#line vty 0 4
+S2(config-line)#password cisco
+S2(config-line)#login
+S2(config-line)#exit
+S2(config)#service password-encryption
+S2(config)#banner motd # Attentions! For staff only!!! #
+S2(config)#int range g1/0-3
+S2(config-if)#sh
+S2(config)#int g0/2
+S2(config-if)#sh
+S2(config-if)#int vlan 1
+S2(config-if)#ip address 192.168.1.3 255.255.255.0
+S2(config-if)#exit
+S2(config)#ip route 0.0.0.0 0.0.0.0 192.168.1.1
+S2(config)#do wr
+```
 ## Часть 2: Настройка и проверка NAT для IPv4.
 
 ### 2.1 Настройте NAT на R1, используя пул из трех адресов 209.165.200.226-209.165.200.228.
-
 ```sh
 R1(config)# access-list 1 permit 192.168.1.0 0.0.0.255 
 R1(config)# ip nat pool PUBLIC_ACCESS 209.165.200.226 209.165.200.228 netmask 255.255.255.248 
@@ -94,7 +187,7 @@ R1(config)#
 R1(config)# ip nat inside source list 1 pool PUBLIC_ACCESS overload 
 ```
 ### 3.3 Протестируйте и проверьте конфигурацию.
-**PC-A to 209.165.200.1**
+**Ping PC-A to 209.165.200.1**
 ```sh
 PC-A> ping 209.165.200.1 -c 1
 84 bytes from 209.165.200.1 icmp_seq=1 ttl=254 time=11.441 ms
@@ -117,7 +210,7 @@ extended, use_count: 0, entry-id: 69, lc_entries: 0
 R1#
 ```
 
-**PC-A & PC-B to 209.165.200.1**
+**Ping PC-A & PC-B to 209.165.200.1**
 ```sh
 PC-A> ping 209.165.200.1 -t
 84 bytes from 209.165.200.1 icmp_seq=1 ttl=254 time=15.539 ms

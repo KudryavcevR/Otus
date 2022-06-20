@@ -1,8 +1,103 @@
 
 ## Часть 1: Создание сети и настройка основных параметров устройства.
+
 ### Шаг 1. Создайте сеть согласно топологии.
+![image](https://user-images.githubusercontent.com/99355274/174661332-34a40526-eb3e-4e2f-8fd8-00880ccfbd02.png)
+
 ### Шаг 2. Настройте базовые параметры для маршрутизатора.
+```sh
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname R1
+R1(config)#no ip domain-lookup
+R1(config)#enable password class
+R1(config)#line con 0
+R1(config-line)#password cisco
+R1(config-line)#line vty 0 4
+R1(config-line)#password cisco
+R1(config-line)#login
+R1(config-line)#exit
+R1(config)#service password-encryption
+R1(config)#banner motd # Attention! For Staff only! #
+R1(config)#int g0/2
+R1(config-if)#ip address 10.22.0.1 255.255.255.0
+R1(config-if)#do wr
+Building configuration...
+[OK]
+```
 ### Шаг 3. Настройте базовые параметры каждого коммутатора.
+**Коммутатор S1**
+```sh
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname S1
+S1(config)#no ip domain-lookup
+S1(config)#enable password class
+S1(config)#line con 0
+S1(config-line)#password cisco
+S1(config-line)#line vty 0 4
+S1(config-line)#password cisco
+S1(config-line)#login
+S1(config-line)#exit
+S1(config)#service password-encryption
+S1(config)#banner motd # Attention!For staff only! #
+S1(config)#int vlan 1
+S1(config-if)#ip address 10.22.0.2 255.255.255.0
+S1(config-if)#exit
+S1(config)#ip default-gateway 10.22.0.1
+S1(config)#do sh ip int br
+Interface              IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0     unassigned      YES unset  up                    up
+GigabitEthernet0/1     unassigned      YES unset  up                    up
+GigabitEthernet0/2     unassigned      YES unset  up                    up
+GigabitEthernet0/3     unassigned      YES unset  up                    up
+GigabitEthernet1/0     unassigned      YES unset  up                    up
+GigabitEthernet1/1     unassigned      YES unset  up                    up
+GigabitEthernet1/2     unassigned      YES unset  up                    up
+GigabitEthernet1/3     unassigned      YES unset  up                    up
+Vlan1                  10.22.0.2       YES NVRAM  up                    up
+S1(config)#int range g0/2-3
+S1(config-if-range)#sh
+S1(config-if-range)#int range g1/0-3
+S1(config-if-range)#sh
+S1(config)#do wr
+```
+**Коммутатор S2**
+```sh
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname S2
+S2(config)#no ip domain-lookup
+S2(config)#enable password class
+S2(config)#line con 0
+S2(config-line)#password cisco
+S2(config-line)#line vty 0 4
+S2(config-line)#password cisco
+S2(config-line)#login
+S2(config-line)#exit
+S2(config)#service password-encryption
+S2(config)#banner motd # Attention!For staff only! #
+S2(config)#int vlan 1
+S2(config-if)#ip address 10.22.0.3 255.255.255.0
+S2(config-if)#exit
+S2(config)#ip default-gateway 10.22.0.1
+S2(config)#do sh ip int br
+Interface              IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0     unassigned      YES unset  up                    up
+GigabitEthernet0/1     unassigned      YES unset  up                    up
+GigabitEthernet0/2     unassigned      YES unset  up                    up
+GigabitEthernet0/3     unassigned      YES unset  up                    up
+GigabitEthernet1/0     unassigned      YES unset  up                    up
+GigabitEthernet1/1     unassigned      YES unset  up                    up
+GigabitEthernet1/2     unassigned      YES unset  up                    up
+GigabitEthernet1/3     unassigned      YES unset  up                    up
+Vlan1                  10.22.0.3       YES NVRAM  up                    up
+S2(config)#int range g0/2-3
+S2(config-if-range)#sh
+S2(config-if-range)#int range g1/0-3
+S2(config-if-range)#sh
+S2(config)#do wr
+```
 
 ## Часть 2: Обнаружение сетевых ресурсов с помощью протокола CDP.
 ```sh
@@ -64,9 +159,9 @@ Total entries displayed: 0
 ### Шаг 1. Выведите на экран текущее время.
 
 
-    Дата     |     Время    | Часовой пояс  | Источник времени
- ----------- | ------------ | ------------- | ----------------
- Jun 20 2022 | 15:16:18.268 |      UTC      |      NTP
+   Дата     |     Время    | Часовой пояс  | Источник времени 
+------------|--------------|---------------|----------------- 
+Jun 20 2022 | 15:16:18.268 |      UTC      |      NTP         
 
 
 ### Шаг 2. Установите время.
@@ -84,9 +179,9 @@ R1(config)#ntp master 4
 
 ### Шаг 4. Настройте клиент NTP.
 
-    Дата     |     Время    | Часовой пояс 
- ----------- | ------------ | -------------
- Jun 20 2022 | 15:20:06.268 |      UTC      
+   Дата     |     Время    | Часовой пояс 
+------------|--------------|-------------
+Jun 20 2022 | 15:20:06.268 |      UTC      
  
  
  **Коммутатор S1**

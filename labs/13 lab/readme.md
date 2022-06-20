@@ -1,3 +1,4 @@
+![image](https://user-images.githubusercontent.com/99355274/174661497-f2b2bf9a-b435-468a-a9c7-efd8e50c98d4.png)
 
 ## Часть 1: Создание сети и настройка основных параметров устройства.
 

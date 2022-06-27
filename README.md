@@ -8,7 +8,7 @@
 <p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/06%20lab/readme.md">6.Внедрение маршрутизации между виртуальными локальными сетями</a>
 <p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/07%20lab/readme.md">7.Развертывание коммутируемой сети с резервными каналами(STP)</a>
 <p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/08%20lab/readme.md">8.Настройка DHCPv6</a>
-<p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/08.1/readme.md">8.1.Настройка DHCPv4</a> 
+<p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/08.1%20lab/readme.md">8.1.Настройка DHCPv4</a> 
 <p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/09%20lab/readme.md">9.Принципы обеспечения безопасности сети</a>
 <p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/10%20lab/readme.md">10.OSPF. Настройка OSPF для одной области </a>
 <p><a href="https://github.com/KudryavcevR/Otus/blob/main/labs/11%20lab/readme.md">11.Списки контроля доступа. ACL </a>
